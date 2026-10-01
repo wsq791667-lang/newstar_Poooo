@@ -326,17 +326,20 @@ function analyze(){
   const asc=[...S.events].sort((a,b)=>a.t-b.t),info={},sessions=[];let lastPee=null,lastPoo=null,pStart=null;
   for(const e of asc){
     const I=info[e.id]={detail:'',gap:null};
-    if(e.type==='pee'){if(lastPee&&dayKey(lastPee.t)===dayKey(e.t)){I.gap={kind:'pee',label:'쉬텀',ms:e.t-lastPee.t};I.detail=`이전 쉬 ${fmtTime(lastPee.t)}`}else I.detail='오늘 첫 쉬';lastPee=e}
+    if(isPee(e)){let base;if(lastPee&&dayKey(lastPee.t)===dayKey(e.t)){I.gap={kind:'pee',label:'쉬텀',ms:e.t-lastPee.t};base=`이전 쉬 ${fmtTime(lastPee.t)}${lastPee.type==='accident'?'(실수)':''}`}else base='오늘 첫 쉬';I.detail=base;lastPee=e}
+    if(e.type==='pee'){}
     else if(e.type==='poo'){const parts=[];if(e.place)parts.push(PLACES[e.place]+' 했어요');if(lastPoo){I.gap={kind:'poo',label:'응가텀',ms:e.t-lastPoo.t};parts.push(`이전 응가 ${dayKey(lastPoo.t)===dayKey(e.t)?fmtTime(lastPoo.t):fmtDay(lastPoo.t,false)+' '+fmtTime(lastPoo.t)}`)}I.detail=parts.join(' · ');lastPoo=e}
     else if(e.type==='pantsOn'){pStart=e.t}
-    else if(e.type==='accident'){if(pStart!=null)I.detail=`팬티 착용 ${fmtDur(e.t-pStart)} 후`}
+    else if(e.type==='accident'){if(pStart!=null){I.pants=`팬티 착용 ${fmtDur(e.t-pStart)} 후`;I.detail=I.pants+' · '+I.detail}}
     else if(e.type==='diaper'){if(pStart!=null){I.detail=`팬티 착용시간 ${fmtDur(e.t-pStart)}`;sessions.push({start:pStart,end:e.t})}pStart=null}
   }
   if(pStart!=null)sessions.push({start:pStart,end:null});
   return {asc,info,sessions,lastPee,lastPoo,pStart};
 }
 function evsIn(A,from,to){return A.asc.filter(e=>e.t>=from&&e.t<to)}
-function peeIntervals(evs){const p=evs.filter(e=>e.type==='pee'),o=[];for(let i=1;i<p.length;i++)if(dayKey(p[i].t)===dayKey(p[i-1].t))o.push(p[i].t-p[i-1].t);return o}
+const isPee=e=>e.type==='pee'||e.type==='accident';
+const peeCnt=evs=>evs.filter(isPee).length;
+function peeIntervals(evs){const p=evs.filter(isPee),o=[];for(let i=1;i<p.length;i++)if(dayKey(p[i].t)===dayKey(p[i-1].t))o.push(p[i].t-p[i-1].t);return o}
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 const cnt=(evs,ty)=>evs.filter(e=>e.type===ty).length;
 
@@ -387,7 +390,7 @@ function header(){
     ?`<input class="kid-input" id="nameInput" maxlength="10" value="${esc(S.name)}" placeholder="아이 이름" aria-label="아이 이름">`
     :`<button class="kid" id="nameBtn" aria-label="아이 이름 바꾸기">${esc(S.name||'우리 아이')}${S.name?'':'<small>이름 정하기</small>'}</button>`;
   const hot=S.say&&S.say.until>Date.now();
-  const lp=[...S.events].filter(e=>e.type==='pee').sort((a,b)=>b.t-a.t)[0];
+  const lp=[...S.events].filter(isPee).sort((a,b)=>b.t-a.t)[0];
   const idle=lp?`마지막 쉬는 ${fmtAgo(Date.now()-lp.t)}예요`:`안녕! 오늘도 같이 기록해요`;
   const showSay=S.tab==='today';
   return `<header class="sky"><span class="cl c1"></span><span class="cl c2"></span><span class="cl c3"></span><span class="stx" style="right:64px;top:10px">✦</span><span class="stx" style="right:150px;top:52px;font-size:10px">✦</span><span class="stx" style="left:46%;bottom:10px;font-size:11px">★</span><div class="top"><div class="who"><div class="app">쉬쉬기록</div>${nameEl}</div><div class="date">${now.getMonth()+1}월 ${now.getDate()}일<br>${DOW[now.getDay()]}요일</div></div>
@@ -430,7 +433,7 @@ function ringCard(from,A,isToday,center){
 }
 function daySummary(evs){
   const ints=peeIntervals(evs),p=[];
-  p.push(`<span class="pill">💧 쉬 <b>${cnt(evs,'pee')}회</b></span>`);
+  p.push(`<span class="pill">💧 쉬 <b>${peeCnt(evs)}회</b>${cnt(evs,'accident')?` (실수 ${cnt(evs,'accident')} 포함)`:''}</span>`);
   if(ints.length)p.push(`<span class="pill">평균 쉬텀 <b>${fmtDur(avg(ints))}</b></span>`,`<span class="pill">최단 <b>${fmtDur(Math.min(...ints))}</b></span>`,`<span class="pill">최장 <b>${fmtDur(Math.max(...ints))}</b></span>`);
   p.push(`<span class="pill">💩 응가 <b>${cnt(evs,'poo')}회</b></span>`);
   const po=cnt(evs,'pantsOn'),ac=cnt(evs,'accident');if(po||ac)p.push(`<span class="pill">🩲 팬티 <b>${po}회</b> · 실수 <b>${ac}회</b></span>`);
@@ -445,12 +448,12 @@ function renderToday(){
   const stPants=wearing?`<span class="st pants">🩲 팬티 착용 중 · ${fmtDur(now-A.pStart)}째</span>`:`<span class="st diaper">🧷 기저귀${lastDiaper?` · ${whenLabel(lastDiaper.t)}부터`:''}</span>`;
   const stPoo=`<span class="st poo">💩 ${A.lastPoo?`마지막 응가 ${whenLabel(A.lastPoo.t)}`:'응가 기록 없음'}</span>`;
   const mini=(l,v)=>`<div class="mini"><div class="l">${l}</div><div class="v num">${v}</div></div>`;
-  const ringCenter=`<div class="l">오늘</div><div class="v num">💧 ${cnt(todays,'pee')} · 💩 ${cnt(todays,'poo')}</div><div class="s">${cnt(todays,'accident')?`실수 ${cnt(todays,'accident')}회`:'하루 24시간'}</div>`;
+  const ringCenter=`<div class="l">오늘</div><div class="v num">💧 ${peeCnt(todays)} · 💩 ${cnt(todays,'poo')}</div><div class="s">${cnt(todays,'accident')?`실수 ${cnt(todays,'accident')}회`:'하루 24시간'}</div>`;
   return header()+`
   <section class="hero" aria-label="현재 상태">
     <div><div class="lbl">💧 마지막 쉬</div>
       <div class="big num">${A.lastPee?fmtAgo(now-A.lastPee.t):'기록 없음'}</div>
-      <div class="since">${A.lastPee?whenLabel(A.lastPee.t)+'에 쉬했어요':'아래 쉬했어요 버튼을 눌러 시작해요'}</div></div>
+      <div class="since">${A.lastPee?whenLabel(A.lastPee.t)+(A.lastPee.type==='accident'?'에 팬티에 쉬했어요':'에 쉬했어요'):'아래 쉬했어요 버튼을 눌러 시작해요'}</div></div>
     <div class="minis">${mini('평균 쉬텀',ints.length?fmtDur(avg(ints)):'–')}${mini('가장 짧은',ints.length?fmtDur(Math.min(...ints)):'–')}${mini('가장 긴',ints.length?fmtDur(Math.max(...ints)):'–')}</div>
     <div class="states">${stPants}${stPoo}</div>
   </section>
@@ -471,7 +474,7 @@ function renderRecords(){
   let body='';
   if(S.view==='day'){
     const from=sod(S.cursor),isToday=dayKey(from)===dayKey(Date.now()),evs=evsIn(A,from,from+DAY);
-    const center=`<div class="l">${isToday?'오늘':fmtDay(from,false)}</div><div class="v num">💧 ${cnt(evs,'pee')} · 💩 ${cnt(evs,'poo')}</div><div class="s">${cnt(evs,'accident')?`실수 ${cnt(evs,'accident')}회`:''}</div>`;
+    const center=`<div class="l">${isToday?'오늘':fmtDay(from,false)}</div><div class="v num">💧 ${peeCnt(evs)} · 💩 ${cnt(evs,'poo')}</div><div class="s">${cnt(evs,'accident')?`실수 ${cnt(evs,'accident')}회`:''}</div>`;
     body=`<div class="navbar"><button class="navbtn" data-move="-1" aria-label="이전 날">‹</button><div class="ttl">${fmtDay(from)}</div><button class="navbtn" data-move="1" aria-label="다음 날">›</button></div>
     ${isToday?'':'<div style="text-align:center"><button class="todaybtn" data-goto="today">오늘로</button></div>'}
     <section class="card">${ringCard(from,A,isToday,center)}</section>
@@ -484,7 +487,7 @@ function renderRecords(){
       const dt=new Date(from);let strip=`<span class="nt" style="left:0;width:${420/14.4}%"></span><span class="nt" style="left:${1260/14.4}%;right:0"></span>`;
       for(const se of A.sessions){const st=Math.max(se.start,from),en=Math.min(se.end??Date.now(),from+DAY);if(en>st)strip+=`<span class="pb" style="left:${(st-from)/DAY*100}%;width:${Math.max(1.2,(en-st)/DAY*100)}%"></span>`}
       for(const e of evs){if(e.type==='memo')continue;strip+=`<span class="pd ${e.type}" style="left:${minOfDay(e.t)/14.4}%"></span>`}
-      const sum=evs.length?`💧 <b>${cnt(evs,'pee')}</b>${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>${cnt(evs,'accident')?` · 💦 <b>${cnt(evs,'accident')}</b>`:''}`:'기록 없음';
+      const sum=evs.length?`💧 <b>${peeCnt(evs)}</b>${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>${cnt(evs,'accident')?` · 💦 <b>${cnt(evs,'accident')}</b>`:''}`:'기록 없음';
       rows.push(`<button class="wrow${dayKey(from)===todayK?' is-today':''}" data-day="${from}"><span class="dl"><b>${DOW[dt.getDay()]}</b>${dt.getMonth()+1}/${dt.getDate()}</span><span class="strip">${strip}</span><span class="wsum">${sum}</span></button>`)}
     body=`<div class="navbar"><button class="navbtn" data-move="-7" aria-label="이전 주">‹</button><div class="ttl">${fmtDay(mon,false)} – ${fmtDay(sun,false)}</div><button class="navbtn" data-move="7" aria-label="다음 주">›</button></div>
     <section class="card"><h2>이번 주 <span>최근 날짜가 위 · 눌러서 하루 보기</span></h2>
@@ -498,7 +501,7 @@ function renderRecords(){
     for(let i=0;i<lead;i++)cells+='<div class="mc blank"></div>';
     let mInts=[],mPoo=0,mAcc=0,mDays=0;
     for(let d=1;d<=days;d++){const from=new Date(y,m,d).getTime(),evs=evsIn(A,from,from+DAY),ints=peeIntervals(evs);mInts.push(...ints);mPoo+=cnt(evs,'poo');mAcc+=cnt(evs,'accident');if(evs.length)mDays++;
-      const pe=cnt(evs,'pee'),po=cnt(evs,'poo'),ac=cnt(evs,'accident');
+      const pe=peeCnt(evs),po=cnt(evs,'poo'),ac=cnt(evs,'accident');
       cells+=`<button class="mc${dayKey(from)===todayK?' is-today':''}" data-day="${from}" aria-label="${m+1}월 ${d}일"><span class="n">${d}</span>${pe?`<span class="c">💧${pe}</span>`:''}${po||ac?`<span class="c">${po?'💩'+po:''}${ac?' 💦'+ac:''}</span>`:''}</button>`}
     body=`<div class="navbar"><button class="navbtn" data-month="-1" aria-label="이전 달">‹</button><div class="ttl">${y}년 ${m+1}월</div><button class="navbtn" data-month="1" aria-label="다음 달">›</button></div>
     <section class="card"><div class="mgrid">${cells}</div></section>
@@ -601,7 +604,7 @@ document.addEventListener('click',ev=>{
   const rec=ev.target.closest('[data-rec]');
   if(rec){const k=rec.dataset.rec;burst(rec,TYPES[k].icon);S.say={text:SAY[k],until:Date.now()+3000};setTimeout(()=>{if(!$('#sheetHost').innerHTML&&!(document.activeElement&&document.activeElement.tagName==='INPUT'))render()},3100);addEvent({type:k,t:Date.now()}).then(id=>{
       const A=analyze(),I=A.info[id]||{};let msg=`${TYPES[k].icon} ${fmtTime(Date.now())} ${TYPES[k].done}`;
-      if(I.gap)msg+=` · ${I.gap.label} ${fmtDur(I.gap.ms)}`;else if(I.detail&&k!=='pee')msg+=` · ${I.detail}`;
+      if(k==='accident'&&I.pants)msg+=` · ${I.pants}`;if(I.gap)msg+=` · ${I.gap.label} ${fmtDur(I.gap.ms)}`;else if(I.detail&&k==='poo')msg+=` · ${I.detail}`;
       toast(msg,id,k==='poo');
       const b=document.querySelector(`[data-rec="${k}"]`);if(b){b.classList.add('flash');setTimeout(()=>b.classList.remove('flash'),500)}});return}
   const ed=ev.target.closest('[data-edit]');if(ed){openSheet(ed.dataset.edit);return}
