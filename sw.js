@@ -1,5 +1,5 @@
 // 쉬쉬기록 오프라인 캐시. 앱을 고친 뒤에는 VERSION 숫자를 올려야 폰에 새 버전이 반영돼요.
-const VERSION = 'shishi-v1';
+const VERSION = 'shishi-v2';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
