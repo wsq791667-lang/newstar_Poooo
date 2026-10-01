@@ -1,0 +1,17 @@
+{
+  "name": "쉬쉬기록",
+  "short_name": "쉬쉬기록",
+  "description": "배변훈련 쉬·응가·팬티 기록",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F7FC",
+  "theme_color": "#F5F7FC",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
