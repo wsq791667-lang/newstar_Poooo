@@ -26,7 +26,7 @@
   --oops:#FFE8D3; --oops-ink:#AD5E22; --oops-dot:#F29A55;
   --diaper:#DFF3E8; --diaper-ink:#3A8460; --diaper-dot:#62B98D;
   --memo:#EEE8FA; --memo-ink:#65509B;
-  --night:#ECE8F8; --dots:#E2E8F4; --danger:#C2453D; --sel:#2A3142;
+  --night:#ECE8F8; --dots:#E2E8F4; --danger:#C2453D; --sticker:#FFFFFF; --sky1:#CDE5FF; --sky2:#FFE1EE; --cloud:#FFFFFF; --star:#FFD66B; --sel:#2A3142;
   --shadow:0 1px 2px rgba(42,49,66,.04),0 6px 18px rgba(42,49,66,.06);
   --f-display:"Jua","Nanum Gothic",system-ui,sans-serif;
   --f-body:"Nanum Gothic",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
@@ -36,16 +36,16 @@
   --pee:#1D3046; --pee-ink:#90C3F0; --pee-dot:#6CB0F0; --poo:#33291F; --poo-ink:#E0B58C; --poo-dot:#C99363;
   --pants:#38222E; --pants-ink:#F0A4C2; --pants-band:#9C4D70; --oops:#3A2919; --oops-ink:#F2AF79; --oops-dot:#F29A55;
   --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF;
-  --night:#232237; --dots:#20242C; --danger:#F08A82; --sel:#E8ECF3; --shadow:none; color-scheme:dark}}
+  --night:#232237; --dots:#20242C; --danger:#F08A82; --sticker:#2E3440; --sky1:#22314A; --sky2:#3A2840; --cloud:#3A4458; --star:#E8C36A; --sel:#E8ECF3; --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#14171D; --surface:#1D2129; --ink:#E8ECF3; --muted:#99A3B5; --line:#2B313C; --soft:#242934;
   --pee:#1D3046; --pee-ink:#90C3F0; --pee-dot:#6CB0F0; --poo:#33291F; --poo-ink:#E0B58C; --poo-dot:#C99363;
   --pants:#38222E; --pants-ink:#F0A4C2; --pants-band:#9C4D70; --oops:#3A2919; --oops-ink:#F2AF79; --oops-dot:#F29A55;
   --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF;
-  --night:#232237; --dots:#20242C; --danger:#F08A82; --sel:#E8ECF3; --shadow:none; color-scheme:dark}
+  --night:#232237; --dots:#20242C; --danger:#F08A82; --sticker:#2E3440; --sky1:#22314A; --sky2:#3A2840; --cloud:#3A4458; --star:#E8C36A; --sel:#E8ECF3; --shadow:none; color-scheme:dark}
 
 *{box-sizing:border-box}
-body{background:var(--bg) radial-gradient(var(--dots) 1.4px,transparent 1.6px) 0 0/22px 22px;color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(var(--dots) 1.6px,transparent 1.8px) 0 0/26px 26px,radial-gradient(var(--dots) 1.6px,transparent 1.8px) 13px 13px/26px 26px,var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
 .wrap{max-width:480px;margin:0 auto;padding-inline:16px;padding-block:12px 124px;display:flex;flex-direction:column;gap:14px}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--pee-dot);outline-offset:2px}
@@ -53,7 +53,15 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .disp{font-family:var(--f-display);font-weight:400}
 
 /* header */
-.top{display:flex;align-items:center;gap:10px;padding-top:4px}
+.sky{position:relative;overflow:hidden;border-radius:30px;padding:14px 16px 16px;background:linear-gradient(160deg,var(--sky1),var(--sky2));border:3px solid var(--sticker);box-shadow:4px 5px 0 rgba(90,120,170,.18);display:flex;flex-direction:column;gap:10px}
+.sky .cl{position:absolute;background:var(--cloud);border-radius:999px;opacity:.85;pointer-events:none}
+.sky .cl::before,.sky .cl::after{content:"";position:absolute;background:var(--cloud);border-radius:50%}
+.sky .cl::before{width:55%;height:150%;left:15%;bottom:20%}
+.sky .cl::after{width:40%;height:120%;right:12%;bottom:25%}
+.sky .c1{width:70px;height:18px;right:18px;top:62px}.sky .c2{width:46px;height:12px;right:96px;top:22px;opacity:.6}.sky .c3{width:56px;height:14px;left:-14px;bottom:14px;opacity:.55}
+.sky .stx{position:absolute;color:var(--star);font-size:14px;pointer-events:none}
+.sky>*:not(.cl):not(.stx){position:relative;z-index:1}
+.top{display:flex;align-items:center;gap:10px}
 .mascot{flex:none;width:52px;height:60px;animation:bob 3.2s ease-in-out infinite}
 .mascot.happy{animation:hop .6s ease 2}
 @keyframes hop{30%{transform:translateY(-8px) rotate(-6deg)}60%{transform:translateY(0) rotate(4deg)}}
@@ -62,6 +70,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .say.hi{border-color:var(--pee-dot)}
 .say.hi::before{border-color:var(--pee-dot)}
 .greet{display:flex;align-items:center;gap:12px}
+.sky .say{border-color:var(--sticker)}.sky .say::before{border-color:var(--sticker)}
 @keyframes bob{50%{transform:translateY(-3px)}}
 .top .who{flex:1;min-width:0}
 .app{font-size:12px;color:var(--muted);letter-spacing:.04em}
@@ -70,21 +79,21 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .kid-input{font-family:var(--f-display);font-size:22px;width:100%;max-width:200px;border:2px solid var(--line);border-radius:12px;padding:2px 10px;background:var(--surface);color:var(--ink)}
 .date{color:var(--muted);font-size:14px;white-space:nowrap;text-align:right}
 
-.card{background:var(--surface);border-radius:28px;border:2px solid var(--line);box-shadow:var(--shadow);padding:16px}
+.card{position:relative;background:var(--surface);border-radius:28px;border:3px solid var(--sticker);outline:2px dashed var(--line);outline-offset:-10px;box-shadow:3px 4px 0 rgba(90,110,150,.12);padding:20px!important;box-shadow:var(--shadow);padding:16px}
 .card h2{font-family:var(--f-display);font-weight:400;font-size:19px;margin:0 0 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .card h2 span{font-family:var(--f-body);font-weight:400;color:var(--muted);font-size:13px}
 
 /* hero status */
-.hero{position:relative;overflow:hidden;background:var(--pee);border-radius:30px;padding:18px 18px 14px;color:var(--pee-ink);display:flex;flex-direction:column;gap:10px}
-.hero::after{content:"💧";position:absolute;right:14px;top:6px;font-size:64px;opacity:.18;transform:rotate(14deg);pointer-events:none}
+.hero{position:relative;overflow:hidden;background:var(--pee);border-radius:30px;border:3px solid var(--sticker);box-shadow:4px 5px 0 rgba(47,108,166,.18);padding:18px 18px 14px;color:var(--pee-ink);display:flex;flex-direction:column;gap:10px}
+.hero::after{content:"";background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.6) 0 18%,transparent 19%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.45) 0 10%,transparent 11%);width:120px;height:120px;position:absolute;right:14px;top:6px;font-size:64px;opacity:.18;transform:rotate(14deg);pointer-events:none}
 .hero>*{position:relative;z-index:1}
 .hero .lbl{font-size:14px;font-weight:800}
 .hero .big{font-family:var(--f-display);font-size:46px;line-height:1.1}
 .hero .since{font-size:13px;opacity:.85}
-.minis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.minis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .mini{background:var(--surface);border-radius:16px;padding:8px 10px;min-width:0}
 .mini .l{font-size:12px;color:var(--muted)}
-.mini .v{font-family:var(--f-display);font-size:17px;white-space:nowrap;line-height:1.25;color:var(--ink)}
+.mini .v{font-family:var(--f-display);font-size:16px;line-height:1.25;color:var(--ink)}
 .states{display:flex;flex-wrap:wrap;gap:8px}
 .st{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-size:14px;font-weight:700}
 .st.pants{background:var(--pants);color:var(--pants-ink)}
@@ -93,19 +102,23 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 
 /* record buttons */
 .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.rec{position:relative;border-radius:26px;box-shadow:inset 0 -6px 0 rgba(42,49,66,.07),inset 0 3px 0 rgba(255,255,255,.35);padding:16px 14px;min-height:96px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:4px;text-align:left;transition:transform .12s ease;overflow:hidden}
+.rec{position:relative;border-radius:26px;border:3px solid var(--sticker);box-shadow:3px 5px 0 var(--shd,rgba(42,49,66,.15)),inset 0 -5px 0 rgba(42,49,66,.06);padding:16px 14px;min-height:96px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:4px;text-align:left;transition:transform .12s ease;overflow:hidden}
 .rec .ic{font-size:30px;line-height:1}
 .rec .t{font-family:var(--f-display);font-weight:400;font-size:19px;line-height:1.25}
 .rec .ic{display:inline-block;transition:transform .2s}
 .rec:hover .ic{transform:rotate(-10deg) scale(1.08)}
 .rec::after{content:"";position:absolute;right:-18px;top:-18px;width:64px;height:64px;border-radius:50%;background:currentColor;opacity:.07}
-.rec:active{transform:translateY(3px) scale(.97);box-shadow:inset 0 -2px 0 rgba(42,49,66,.07)}
-.rec.pee{background:var(--pee);color:var(--pee-ink);grid-column:1/-1;min-height:84px;flex-direction:row;align-items:center;justify-content:center;gap:12px}
+.rec:active{transform:translate(3px,4px);box-shadow:0 1px 0 var(--shd,rgba(42,49,66,.15))}
+.rec .ic svg{width:44px;height:44px;display:block}
+.rec.pee .ic svg{width:52px;height:52px}
+.rec:nth-child(2){transform:rotate(-1.2deg)}.rec:nth-child(3){transform:rotate(1deg)}.rec:nth-child(4){transform:rotate(.8deg)}.rec:nth-child(5){transform:rotate(-1deg)}
+.rec:nth-child(n+2):active{transform:translate(3px,4px)}
+.rec.pee{--shd:rgba(47,108,166,.28);background:var(--pee);color:var(--pee-ink);grid-column:1/-1;min-height:84px;flex-direction:row;align-items:center;justify-content:center;gap:12px}
 .rec.pee .ic{font-size:38px}.rec.pee .t{font-size:28px}
-.rec.poo{background:var(--poo);color:var(--poo-ink)}
-.rec.pants{background:var(--pants);color:var(--pants-ink)}
-.rec.oops{background:var(--oops);color:var(--oops-ink)}
-.rec.diaper{background:var(--diaper);color:var(--diaper-ink)}
+.rec.poo{--shd:rgba(138,91,51,.28);background:var(--poo);color:var(--poo-ink)}
+.rec.pants{--shd:rgba(168,69,111,.25);background:var(--pants);color:var(--pants-ink)}
+.rec.oops{--shd:rgba(173,94,34,.25);background:var(--oops);color:var(--oops-ink)}
+.rec.diaper{--shd:rgba(58,132,96,.25);background:var(--diaper);color:var(--diaper-ink)}
 .rec.dim{opacity:.55}
 .rec.flash{animation:pop .5s ease}
 @keyframes pop{0%{transform:scale(.92)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
@@ -119,7 +132,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .ring-center .s{font-size:12px;color:var(--muted)}
 .rbg{fill:var(--soft)} .rnight{fill:var(--night)} .rface{fill:var(--surface)}
 .rtick{stroke:var(--line);stroke-width:1.5} .rtick.major{stroke:var(--muted);stroke-width:2}
-.rlab{fill:var(--muted);font-size:11px;font-family:var(--f-body);font-weight:700}
+.rlab{fill:var(--muted);font-size:13px;font-family:var(--f-display)}
 .rband{fill:none;stroke:var(--pants-band);stroke-width:14;stroke-linecap:round;opacity:.9}
 .dot{stroke:var(--surface);stroke-width:2.5}
 .dot.pee{fill:var(--pee-dot)} .dot.poo{fill:var(--poo-dot)} .dot.accident{fill:var(--oops-dot)} .dot.diaper{fill:var(--diaper-dot)} .dot.pantsOn{fill:var(--pants-ink)}
@@ -138,10 +151,11 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 
 /* timeline: newest on top, stacked */
 .tl{display:flex;flex-direction:column;position:relative}
-.tl::before{content:"";position:absolute;left:73px;top:20px;bottom:20px;width:2px;background:var(--line);border-radius:1px}
-.row{position:relative;display:grid;grid-template-columns:52px 40px 1fr auto;align-items:center;gap:6px;padding:8px 2px;text-align:left;width:100%}
+.tl::before{content:"";position:absolute;left:75px;border-left:2px dashed var(--line);background:none!important;top:20px;bottom:20px;width:2px;background:var(--line);border-radius:1px}
+.row{position:relative;display:grid;grid-template-columns:52px 44px 1fr auto;align-items:center;gap:6px;padding:8px 2px;text-align:left;width:100%}
 .row .tm{font-weight:800;font-variant-numeric:tabular-nums;font-size:15px}
-.bub{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:17px;position:relative;z-index:1;border:3px solid var(--surface)}
+.bub svg{width:28px;height:28px;display:block}
+.bub{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:17px;position:relative;z-index:1;border:3px solid var(--surface)}
 .bub.pee{background:var(--pee)}.bub.poo{background:var(--poo)}.bub.pants{background:var(--pants)}.bub.oops{background:var(--oops)}.bub.diaper{background:var(--diaper)}.bub.memo{background:var(--memo)}
 .row .txt{min-width:0}
 .row .nm{font-weight:700;line-height:1.3}
@@ -216,12 +230,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 
 /* nav */
 nav{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:5;pointer-events:none}
-nav .in{pointer-events:auto;background:var(--surface);border:2px solid var(--line);border-radius:26px;box-shadow:0 8px 24px rgba(42,49,66,.12)}
+nav .in{pointer-events:auto;background:var(--surface);border:3px solid var(--sticker);outline:2px solid var(--line);border-radius:28px;box-shadow:3px 5px 0 rgba(90,110,150,.16)}
 nav .in{max-width:456px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);padding:4px}
 nav button{border-radius:20px;padding:7px 0 8px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;color:var(--muted)}
 nav button .e{font-size:22px;line-height:1.1;filter:grayscale(1);opacity:.55}
 nav button[aria-current="page"]{color:var(--pee-ink);font-weight:800;background:var(--pee)}
-nav button[aria-current="page"] .e{filter:none;opacity:1}
+nav button[aria-current="page"] .e{filter:none;opacity:1;animation:wig .5s ease}
+@keyframes wig{30%{transform:rotate(-12deg) scale(1.15)}60%{transform:rotate(8deg)}}
 
 /* toast */
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);border-radius:20px;padding:12px 10px 12px 16px;display:flex;flex-direction:column;gap:8px;z-index:9;width:max-content;max-width:calc(100% - 32px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
@@ -273,6 +288,19 @@ const TYPES={
   memo:{icon:'📝',label:'메모',cls:'memo',done:'메모 저장'}
 };
 const SAY={pee:'쉬 기록 완료! 💧',poo:'응가 기록했어요 💩',pantsOn:'팬티 입었다! 🩲',accident:'괜찮아요, 기록해 둘게요 🫧',diaper:'기저귀로 바꿨어요 🧷'};
+const INK='#2A3142';
+const face=(x1,x2,y,mood)=>mood==='oops'
+ ?`<path d="M${x1-2.5} ${y-2}l3 2-3 2M${x2+2.5} ${y-2}l-3 2 3 2" stroke="${INK}" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="${(x1+x2)/2}" cy="${y+5}" rx="1.8" ry="2" fill="${INK}"/>`
+ :`<circle cx="${x1}" cy="${y}" r="2.3" fill="${INK}"/><circle cx="${x2}" cy="${y}" r="2.3" fill="${INK}"/><circle cx="${x1+.8}" cy="${y-.8}" r=".8" fill="#fff"/><circle cx="${x2+.8}" cy="${y-.8}" r=".8" fill="#fff"/><path d="M${(x1+x2)/2-2.6} ${y+3.6}q2.6 2.6 5.2 0" stroke="${INK}" stroke-width="1.7" fill="none" stroke-linecap="round"/>`;
+const blush=(x1,x2,y)=>`<ellipse cx="${x1}" cy="${y}" rx="2.8" ry="1.7" fill="#F7A8C4" opacity=".9"/><ellipse cx="${x2}" cy="${y}" rx="2.8" ry="1.7" fill="#F7A8C4" opacity=".9"/>`;
+const CH={
+ pee:()=>`<svg viewBox="0 0 48 48"><path d="M24 4C24 4 9 22 9 31a15 15 0 0 0 30 0C39 22 24 4 24 4Z" fill="#8EC5F5" stroke="#3F7FBF" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 22q-2 3-2.5 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" fill="none" opacity=".8"/>${face(19,29,31)}${blush(15,33,35.5)}</svg>`,
+ poo:()=>`<svg viewBox="0 0 48 48"><g fill="#C9935F" stroke="#7A4E2B" stroke-width="2.2" stroke-linejoin="round"><path d="M24 7q7 3 4 9"/><ellipse cx="24" cy="19" rx="9" ry="5.5"/><ellipse cx="24" cy="28" rx="13" ry="6.5"/><ellipse cx="24" cy="37.5" rx="17" ry="7"/></g><path d="M18 17q2-1.5 4-1" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".6"/>${face(19,29,35)}${blush(14.5,33.5,39)}</svg>`,
+ pantsOn:()=>`<svg viewBox="0 0 48 48"><path d="M7 13h34l-2.5 12q-7 2-10 13h-9q-3-11-10-13Z" fill="#F7B6CF" stroke="#B34F7A" stroke-width="2.2" stroke-linejoin="round"/><path d="M7 13h34v5.5H7Z" fill="#FBD3E3" stroke="#B34F7A" stroke-width="2.2" stroke-linejoin="round"/><path d="M24 26.5c-2.6-3-6.4-.4-3.8 2.6L24 33l3.8-3.9c2.6-3-1.2-5.6-3.8-2.6Z" fill="#fff"/><circle cx="13" cy="15.8" r="1.2" fill="#B34F7A"/><circle cx="35" cy="15.8" r="1.2" fill="#B34F7A"/></svg>`,
+ accident:()=>`<svg viewBox="0 0 48 48"><path d="M22 7C22 7 8 24 8 32a14 14 0 0 0 28 0C36 24 22 7 22 7Z" fill="#F9C795" stroke="#C46A2A" stroke-width="2.2" stroke-linejoin="round"/>${face(17,27,31,'oops')}${blush(13,31,35.5)}<path d="M39 9c0 0-4 5-4 7.5a4 4 0 0 0 8 0C43 14 39 9 39 9Z" fill="#9CCFF6" stroke="#3F7FBF" stroke-width="1.8"/><path d="M41 23l3-1M40 27l3.5 1" stroke="#C46A2A" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+ diaper:()=>`<svg viewBox="0 0 48 48"><path d="M6 15q18-6 36 0l-3 13q-6 11-15 11T9 28Z" fill="#C3EBD6" stroke="#3E8E66" stroke-width="2.2" stroke-linejoin="round"/><path d="M6 15q18-6 36 0l-.8 5q-17.2-5-34.4 0Z" fill="#E4F7EC" stroke="#3E8E66" stroke-width="2.2" stroke-linejoin="round"/>${face(19,29,27)}${blush(15,33,31)}<g transform="translate(33 30) rotate(-20)"><rect x="0" y="0" width="10" height="4" rx="2" fill="#FFD66B" stroke="#B88A1E" stroke-width="1.4"/></g></svg>`,
+ memo:()=>'📝'
+};
 const PLACES={potty:'변기에',diaper:'기저귀에',pants:'팬티에'};
 const DOW=['일','월','화','수','목','금','토'];
 const DAY=864e5;
@@ -362,8 +390,8 @@ function header(){
   const lp=[...S.events].filter(e=>e.type==='pee').sort((a,b)=>b.t-a.t)[0];
   const idle=lp?`마지막 쉬는 ${fmtAgo(Date.now()-lp.t)}예요`:`안녕! 오늘도 같이 기록해요`;
   const showSay=S.tab==='today';
-  return `<header class="top"><div class="who"><div class="app">쉬쉬기록</div>${nameEl}</div><div class="date">${now.getMonth()+1}월 ${now.getDate()}일<br>${DOW[now.getDay()]}요일</div></header>
-  ${showSay?`<div class="greet">${MASCOT(hot)}<div class="say${hot?' hi':''}">${esc(hot?S.say.text:idle)}</div></div>`:''}`;
+  return `<header class="sky"><span class="cl c1"></span><span class="cl c2"></span><span class="cl c3"></span><span class="stx" style="right:64px;top:10px">✦</span><span class="stx" style="right:150px;top:52px;font-size:10px">✦</span><span class="stx" style="left:46%;bottom:10px;font-size:11px">★</span><div class="top"><div class="who"><div class="app">쉬쉬기록</div>${nameEl}</div><div class="date">${now.getMonth()+1}월 ${now.getDate()}일<br>${DOW[now.getDay()]}요일</div></div>
+  ${showSay?`<div class="greet">${MASCOT(hot)}<div class="say${hot?' hi':''}">${esc(hot?S.say.text:idle)}</div></div>`:''}</header>`;
 }
 
 function rowHTML(e,A){
@@ -371,7 +399,7 @@ function rowHTML(e,A){
   const name=e.type==='memo'?esc(e.text||''):e.type==='poo'&&e.place?`응가 · ${PLACES[e.place].slice(0,-1)}`:T.label;
   const detail=e.type==='memo'?'메모':(I.detail||'');
   const gap=I.gap?`<span class="gap ${I.gap.kind}"><small>${I.gap.label}</small><b>${fmtDur(I.gap.ms)}</b></span>`:'<span></span>';
-  return `<button class="row" data-edit="${e.id}"><span class="tm">${fmtTime(e.t)}</span><span class="bub ${T.cls}" aria-hidden="true">${T.icon}</span><span class="txt"><div class="nm">${name}</div>${detail?`<div class="dt">${detail}</div>`:''}</span>${gap}</button>`;
+  return `<button class="row" data-edit="${e.id}"><span class="tm">${fmtTime(e.t)}</span><span class="bub ${T.cls}" aria-hidden="true">${(CH[e.type]||CH.memo)()}</span><span class="txt"><div class="nm">${name}</div>${detail?`<div class="dt">${detail}</div>`:''}</span>${gap}</button>`;
 }
 function timeline(evs,A,isToday){
   if(!evs.length)return `<div class="empty">${isToday?'아직 오늘 기록이 없어요.<br>버튼을 누르면 지금 시간이 바로 저장돼요.':'이 날은 기록이 없어요.'}</div>`;
@@ -385,7 +413,7 @@ function ringSVG(from,A,isToday){
   const f=n=>n.toFixed(1);
   const arc=(m1,m2,r)=>{if(m2-m1>=1439)return `M${C} ${C-r}a${r} ${r} 0 1 1 -0.01 0`;const [x1,y1]=P(m1,r),[x2,y2]=P(m2,r);return `M${f(x1)} ${f(y1)}A${r} ${r} 0 ${m2-m1>720?1:0} 1 ${f(x2)} ${f(y2)}`};
   const wedge=(m1,m2,r)=>{const [x1,y1]=P(m1,r),[x2,y2]=P(m2,r);return `M${C} ${C}L${f(x1)} ${f(y1)}A${r} ${r} 0 ${m2-m1>720?1:0} 1 ${f(x2)} ${f(y2)}Z`};
-  let s=`<svg viewBox="0 0 300 300" role="img" aria-label="하루 시계 그래프"><circle class="rbg" cx="150" cy="150" r="132"/>`;
+  let s=`<svg viewBox="0 0 300 300" role="img" aria-label="하루 시계 그래프"><circle class="rbg" cx="150" cy="150" r="132"/><circle cx="150" cy="150" r="128" fill="none" stroke="var(--surface)" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" opacity=".9"/>`;
   s+=`<path class="rnight" d="${wedge(0,420,132)}"/><path class="rnight" d="${wedge(1260,1440,132)}"/>`;
   for(let h=0;h<24;h++){const maj=h%3===0,[x1,y1]=P(h*60,maj?118:124),[x2,y2]=P(h*60,132);s+=`<line class="rtick${maj?' major':''}" x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"/>`}
   for(let h=0;h<24;h+=3){const [x,y]=P(h*60,143);const lab=h===0?'🌙':h===12?'☀️':h;s+=`<text class="rlab" x="${f(x)}" y="${f(y)}" text-anchor="middle" dominant-baseline="central"${typeof lab==='string'?' font-size="14"':''}>${lab}</text>`}
@@ -428,7 +456,7 @@ function renderToday(){
   </section>
   <section class="btns" aria-label="기록 버튼">
     ${['pee','poo','pantsOn','accident','diaper'].map(k=>{const T=TYPES[k];const dim=(k==='pantsOn'&&wearing)||((k==='accident'||k==='diaper')&&!wearing);
-      return `<button class="rec ${T.cls}${dim?' dim':''}" data-rec="${k}"><span class="ic" aria-hidden="true">${T.icon}</span><span class="t">${T.btn}</span></button>`}).join('')}
+      return `<button class="rec ${T.cls}${dim?' dim':''}" data-rec="${k}"><span class="ic" aria-hidden="true">${CH[k]()}</span><span class="t">${T.btn}</span></button>`}).join('')}
   </section>
   <section class="card"><h2>오늘 하루 시계 <span>🌙 밤 0시 · ☀️ 낮 12시</span></h2>${ringCard(from,A,true,ringCenter)}</section>
   <section class="card"><h2>메모 <span>짧게 한 줄</span></h2>
