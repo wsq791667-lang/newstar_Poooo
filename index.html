@@ -486,7 +486,7 @@ const mi=k=>`<i class="mi" aria-hidden="true">${CH[k]()}</i>`;
 const PLACES={potty:'변기에',diaper:'기저귀에',pants:'팬티에'};
 const DOW=['일','월','화','수','목','금','토'];
 const DAY=864e5;
-const S={events:[],name:'',months:'',birth:'',reports:{},sample:null,repDay:null,repBusy:false,repErr:'',db:null,tab:'today',view:'day',cursor:Date.now(),editingName:false};
+const S={open:{plan:true,advfull:false},events:[],name:'',months:'',birth:'',reports:{},sample:null,repDay:null,repBusy:false,repErr:'',db:null,tab:'today',view:'day',cursor:Date.now(),editingName:false};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -716,7 +716,7 @@ function renderAdvice(r){
     ${L(d.summary)[0]?`<p class="advpeek">${esc(L(d.summary)[0])}</p>`:''}
     ${plan.length?`<div class="chips2">${plan.map(x=>`<span class="pt">${esc(x.time||'오늘')}</span>`).join('')}</div>`:''}
     ${d.caution?`<div class="caution">🩺 ${esc(d.caution)}</div>`:''}
-    <details class="advfull"><summary><span class="more">조언 전체 보기</span></summary>
+    <details class="advfull" data-k="advfull"${S.open.advfull?' open':''}><summary><span class="more">조언 전체 보기</span></summary>
       ${sec('', 'pee','한눈에',L(d.summary))}
       ${sec('good','dry','잘 되고 있어요',L(d.good))}
       ${sec('pat','accident','눈여겨볼 점',L(d.patterns))}
@@ -793,7 +793,7 @@ async function askAdvice(){
 function planCardToday(){
   const {y}=repDays(),r=S.reports[dayKey(y)];if(!r||!r.data||!Array.isArray(r.data.plan)||!r.data.plan.length)return '';
   const pl=r.data.plan;
-  return `<details class="card plancard"><summary><span class="pc-t">${mi('wake')}오늘의 작전 <small>${pl.length}가지</small></span><span class="pc-peek">${esc(pl[0].time||pl[0].action||'')}${pl.length>1?` 외 ${pl.length-1}개`:''}</span><span class="more">전체 보기</span></summary>
+  return `<details class="card plancard" data-k="plan"${S.open.plan?' open':''}><summary><span class="pc-t">${mi('wake')}오늘의 작전 <small>${pl.length}가지</small></span><span class="pc-peek">${esc(pl[0].time||pl[0].action||'')}${pl.length>1?` 외 ${pl.length-1}개`:''}</span><span class="more">전체 보기</span></summary>
     <ol class="planlist">${pl.map(x=>`<li>${x.time?`<span class="pt">${esc(x.time)}</span>`:''}<span class="pa">${esc(x.action||'')}</span></li>`).join('')}</ol></details>`;
 }
 
@@ -828,13 +828,11 @@ function renderToday(){
     <button class="rec dry small" data-rec="dry"><span class="ic" aria-hidden="true">${CH.dry()}</span><span class="t">뽀송했어요</span></button>
     <button class="rec ${A.sleeping?'wake':'sleep'}" data-rec="${A.sleeping?'wake':'sleep'}"><span class="ic" aria-hidden="true">${CH[A.sleeping?'wake':'sleep']()}</span><span class="t">${A.sleeping?'일어났어요':'잠들었어요'}</span></button>
   </section>
-  ${planCardToday()}
-  <section class="card"><h2>오늘 하루 시계 <span>🌙 밤 0시 · ☀️ 낮 12시</span></h2>${ringCard(from,A,true,ringCenter)}</section>
   <section class="card"><h2>메모 <span>짧게 한 줄</span></h2>
     <form class="memo-row" id="memoForm"><input id="memoInput" maxlength="40" placeholder="예: 쉬 마렵다고 처음 말함" aria-label="메모"><button type="submit">추가</button></form>
     <div class="chips">${['물을 많이 마심','외출함','쉬 마렵다고 말함','낮잠 잠'].map(c=>`<button class="chip" data-chip="${c}">${c}</button>`).join('')}</div>
   </section>
-  <section class="card"><h2>오늘 기록 <span>눌러서 수정</span></h2>${timeline(todays,A,true)}</section>`;
+  ${planCardToday()}`;
 }
 
 function renderRecords(){
@@ -1032,6 +1030,7 @@ document.addEventListener('click',ev=>{
 document.addEventListener('submit',ev=>{if(ev.target.id==='memoForm'){ev.preventDefault();const i=$('#memoInput'),v=i.value.trim();if(!v)return;i.value='';addEvent({type:'memo',t:Date.now(),text:v}).then(id=>toast('📝 메모 저장',id))}});
 function fallbackCopy(txt,done){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done()}catch(e){toast('복사하지 못했어요')}ta.remove()}
 document.addEventListener('change',ev=>{if(ev.target.id==='monthsInput'){const v=String(ev.target.value||'').replace(/[^0-9]/g,'').slice(0,2);if(v!==S.months){S.months=v;saveSettings();toast('저장했어요')}}});
+document.addEventListener('toggle',ev=>{const k=ev.target&&ev.target.dataset&&ev.target.dataset.k;if(k)S.open[k]=ev.target.open},true);
 function commitName(){const i=$('#nameInput');if(!i)return;const v=i.value.trim();S.editingName=false;if(v!==S.name)setName(v);else render()}
 document.addEventListener('keydown',ev=>{if(ev.target.id==='nameInput'){if(ev.key==='Enter')commitName();if(ev.key==='Escape'){S.editingName=false;render()}}});
 document.addEventListener('focusout',ev=>{if(ev.target.id==='nameInput')setTimeout(commitName,0)});
