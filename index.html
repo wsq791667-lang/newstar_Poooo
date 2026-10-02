@@ -26,7 +26,7 @@
   --oops:#FFE8D3; --oops-ink:#AD5E22; --oops-dot:#F29A55;
   --diaper:#DFF3E8; --diaper-ink:#3A8460; --diaper-dot:#62B98D;
   --memo:#EEE8FA; --memo-ink:#65509B;
-  --sleep:#E8E3FA; --sleep-ink:#5A4C9E; --sleep-band:#B7ACEA; --away-band:#F6C99B; --away:#FFF0E0; --away-ink:#A2602A; --dry:#FFF3CC; --dry-ink:#93700F; --dry-dot:#F2C94C;
+  --sleep:#E8E3FA; --sleep-ink:#5A4C9E; --sleep-band:#B7ACEA; --away-band:#F6C99B; --rest:#DCD8EA; --away:#FFF0E0; --away-ink:#A2602A; --dry:#FFF3CC; --dry-ink:#93700F; --dry-dot:#F2C94C;
   --night:#ECE8F8; --dots:#E2E8F4; --danger:#C2453D; --sticker:#FFFFFF; --sky1:#CDE5FF; --sky2:#FFE1EE; --cloud:#FFFFFF; --star:#FFD66B; --sel:#2A3142;
   --shadow:0 1px 2px rgba(42,49,66,.04),0 6px 18px rgba(42,49,66,.06);
   --f-display:"Jua","Nanum Gothic",system-ui,sans-serif;
@@ -36,13 +36,13 @@
   --bg:#14171D; --surface:#1D2129; --ink:#E8ECF3; --muted:#99A3B5; --line:#2B313C; --soft:#242934;
   --pee:#1D3046; --pee-ink:#90C3F0; --pee-dot:#6CB0F0; --poo:#33291F; --poo-ink:#E0B58C; --poo-dot:#C99363;
   --pants:#38222E; --pants-ink:#F0A4C2; --pants-band:#9C4D70; --diaper-band:#3F7A5C; --oops:#3A2919; --oops-ink:#F2AF79; --oops-dot:#F29A55;
-  --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF; --sleep:#28243F; --sleep-ink:#BDB2F2; --sleep-band:#5E539A; --away-band:#8A5A33; --away:#3A2C1E; --away-ink:#F2BE8C; --dry:#3A321A; --dry-ink:#F0CF6E; --dry-dot:#E2B93E;
+  --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF; --sleep:#28243F; --sleep-ink:#BDB2F2; --sleep-band:#5E539A; --away-band:#8A5A33; --rest:#34324A; --away:#3A2C1E; --away-ink:#F2BE8C; --dry:#3A321A; --dry-ink:#F0CF6E; --dry-dot:#E2B93E;
   --night:#232237; --dots:#20242C; --danger:#F08A82; --sticker:#2E3440; --sky1:#22314A; --sky2:#3A2840; --cloud:#3A4458; --star:#E8C36A; --sel:#E8ECF3; --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#14171D; --surface:#1D2129; --ink:#E8ECF3; --muted:#99A3B5; --line:#2B313C; --soft:#242934;
   --pee:#1D3046; --pee-ink:#90C3F0; --pee-dot:#6CB0F0; --poo:#33291F; --poo-ink:#E0B58C; --poo-dot:#C99363;
   --pants:#38222E; --pants-ink:#F0A4C2; --pants-band:#9C4D70; --diaper-band:#3F7A5C; --oops:#3A2919; --oops-ink:#F2AF79; --oops-dot:#F29A55;
-  --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF; --sleep:#28243F; --sleep-ink:#BDB2F2; --sleep-band:#5E539A; --away-band:#8A5A33; --away:#3A2C1E; --away-ink:#F2BE8C; --dry:#3A321A; --dry-ink:#F0CF6E; --dry-dot:#E2B93E;
+  --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF; --sleep:#28243F; --sleep-ink:#BDB2F2; --sleep-band:#5E539A; --away-band:#8A5A33; --rest:#34324A; --away:#3A2C1E; --away-ink:#F2BE8C; --dry:#3A321A; --dry-ink:#F0CF6E; --dry-dot:#E2B93E;
   --night:#232237; --dots:#20242C; --danger:#F08A82; --sticker:#2E3440; --sky1:#22314A; --sky2:#3A2840; --cloud:#3A4458; --star:#E8C36A; --sel:#E8ECF3; --shadow:none; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -221,10 +221,12 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .strip .at{position:absolute;top:0;bottom:0;background:var(--away-band);opacity:.45}
 .bub.away{background:var(--away)}
 .awaybtn{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 12px;font-family:var(--f-display);font-size:15px;background:var(--surface);border:2px solid var(--line);color:var(--muted);white-space:nowrap}
+.awaybtn.pick{background:var(--away);color:var(--away-ink);border-color:var(--away-band);animation:pop .3s ease}
 .awaybtn.on{background:var(--away);color:var(--away-ink);border-color:var(--away-band)}
 .awaybtn small{font-family:var(--f-body);font-size:11px;font-weight:700}
 .tools .right{display:flex;align-items:center;gap:6px;flex:none}
 .tools .tt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rrest{fill:var(--rest);opacity:.8}
 .rsleep{fill:none;stroke:var(--sleep-band);stroke-width:8;stroke-linecap:round}
 .dot.pee{fill:var(--pee-dot)} .dot.poo{fill:var(--poo-dot)} .dot.accident{fill:var(--oops-dot)} .dot.diaper{fill:var(--diaper-dot)} .dot.pantsOn{fill:var(--pants-ink)}
 .hand{stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
@@ -295,7 +297,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .wrow{border-top:2px dashed var(--line)!important}
 .strip{border:2px solid var(--sticker);box-shadow:inset 0 1px 3px rgba(42,49,66,.06)}
 .strip{position:relative;height:26px;background:var(--soft);border-radius:13px;overflow:hidden}
-.strip .nt{position:absolute;top:0;bottom:0;background:var(--sleep-band);opacity:.55}
+.strip .nt{position:absolute;top:0;bottom:0;background:var(--rest)}
 .strip .pb{position:absolute;top:8px;height:10px;background:var(--pants-band)}
 .strip .db{position:absolute;top:8px;height:10px;background:var(--diaper-band)}
 .strip .pd.pantsOn,.strip .pd.diaper{top:13px;width:9px;height:9px;margin:-4.5px 0 0 -4.5px}
@@ -465,8 +467,8 @@ const TYPES={
   dry:{icon:'🌟',label:'뽀송 확인',btn:'뽀송했어요',cls:'dry',done:'뽀송 기록'},
   sleep:{icon:'😴',label:'잠들었어요',btn:'잠들었어요',cls:'sleep',done:'잠 기록'},
   wake:{icon:'🌞',label:'일어났어요',btn:'일어났어요',cls:'wake',done:'기상 기록'},
-  out:{icon:'🎒',label:'등원 (어린이집)',btn:'등원',cls:'away',done:'등원 기록'},
-  back:{icon:'🏠',label:'하원',btn:'하원',cls:'away',done:'하원 기록'},
+  out:{icon:'🎒',label:'나갔어요',btn:'나가요',cls:'away',done:'나간 시간 기록'},
+  back:{icon:'🏠',label:'돌아왔어요',btn:'돌아왔어요',cls:'away',done:'돌아온 시간 기록'},
   memo:{icon:'📝',label:'메모',cls:'memo',done:'메모 저장'}
 };
 const SAY={out:'다녀와! 🎒',back:'어서 와! 🏠',dry:'뽀송뽀송! 🌟',sleep:'잘 자요 🌙',wake:'좋은 아침! ☀️',pee:'쉬 기록 완료! 💧',poo:'응가 기록했어요 💩',pantsOn:'팬티 입었다! 🩲',accident:'괜찮아요, 기록해 둘게요 🫧',diaper:'기저귀로 바꿨어요 🧷'};
@@ -522,8 +524,8 @@ function analyze(){
   for(const e of asc){if(e.type==='sleep'){if(sStart==null)sStart=e.t}else if(e.type==='wake'){if(sStart!=null){sleeps.push({start:sStart,end:e.t});sStart=null}}}
   if(sStart!=null)sleeps.push({start:sStart,end:null});
   SLEEPS=sleeps;
-  const aways=[];let aStart=null;for(const e of asc){if(e.type==='out'){if(aStart==null)aStart=e.t}else if(e.type==='back'){if(aStart!=null){aways.push({start:aStart,end:e.t});aStart=null}}}
-  if(aStart!=null)aways.push({start:aStart,end:null});
+  const aways=[],outings=[];let aStart=null,aKind=null;for(const e of asc){if(e.type==='out'){if(aStart==null){aStart=e.t;aKind=e.place==='outing'?'outing':'daycare'}}else if(e.type==='back'){if(aStart!=null){(aKind==='outing'?outings:aways).push({start:aStart,end:e.t});aStart=null}}}
+  if(aStart!=null)(aKind==='outing'?outings:aways).push({start:aStart,end:null});
   AWAYS=aways;let lastBack=null;
   for(const e of asc){
     const I=info[e.id]={detail:'',gap:null};
@@ -536,8 +538,8 @@ function analyze(){
     if(e.type==='pee'){}
     else if(e.type==='poo'){const parts=[];if(e.place)parts.push(PLACES[e.place]+' 했어요');if(lastPoo){I.gap={kind:'poo',label:'응가텀',ms:e.t-lastPoo.t};parts.push(`이전 응가 ${dayKey(lastPoo.t)===dayKey(e.t)?fmtTime(lastPoo.t):fmtDay(lastPoo.t,false)+' '+fmtTime(lastPoo.t)}`)}I.detail=parts.join(' · ');lastPoo=e}
     else if(e.type==='pantsOn'){pStart=e.t}
-    else if(e.type==='back'){lastBack=e;const ap=aways.find(x=>x.end===e.t);if(ap)I.detail=`${fmtDur(ap.end-ap.start)} 다녀왔어요`}
-    else if(e.type==='out'){I.detail=lastPee?`마지막 쉬 ${fmtTime(lastPee.t)}`:''}
+    else if(e.type==='back'){const ap=aways.find(x=>x.end===e.t),op=outings.find(x=>x.end===e.t);if(ap){lastBack=e;I.detail=`어린이집 ${fmtDur(ap.end-ap.start)} 다녀왔어요`}else if(op)I.detail=`외출 ${fmtDur(op.end-op.start)} 다녀왔어요`}
+    else if(e.type==='out'){I.detail=(e.place==='outing'?'외출 · ':'')+(lastPee?`마지막 쉬 ${fmtTime(lastPee.t)}`:'')}
     else if(e.type==='wake'){lastWake=e;const sp=sleeps.find(x=>x.end===e.t);if(sp)I.detail=`${fmtDur(sp.end-sp.start)} 잤어요`}
     else if(e.type==='sleep'){I.detail=lastPee?`마지막 쉬 ${fmtTime(lastPee.t)}`:''}
     else if(e.type==='dry'){if(lastPee){I.dryMs=e.t-lastPee.t;I.detail=`마지막 쉬 후 ${fmtDur(I.dryMs)} 동안 뽀송`}else I.detail='기저귀 뽀송'}
@@ -545,7 +547,7 @@ function analyze(){
     else if(e.type==='diaper'){if(pStart!=null){I.detail=`팬티 착용시간 ${fmtDur(e.t-pStart)}`;sessions.push({start:pStart,end:e.t})}pStart=null}
   }
   if(pStart!=null)sessions.push({start:pStart,end:null});
-  return {asc,info,sessions,sleeps,lastPee,lastPoo,pStart,sleeping:sStart!=null,sleepStart:sStart,aways,away:aStart!=null,awayStart:aStart};
+  return {asc,info,sessions,sleeps,lastPee,lastPoo,pStart,sleeping:sStart!=null,sleepStart:sStart,aways,outings,away:aStart!=null,awayStart:aStart,awayKind:aKind};
 }
 /* pants / diaper wearing segments for one day, continuous until now */
 function wearSegments(A,from,to){
@@ -637,10 +639,10 @@ function header(){
 
 function rowHTML(e,A){
   const T=TYPES[e.type]||TYPES.memo,I=A.info[e.id]||{};
-  const name=e.type==='memo'?esc(e.text||''):e.type==='poo'&&e.place==='pants'?'응가 실수 (팬티)':e.type==='poo'&&e.place?`응가 · ${PLACES[e.place].slice(0,-1)}`:T.label;
+  const name=e.type==='memo'?esc(e.text||''):e.type==='out'?(e.place==='outing'?'외출했어요':'등원했어요'):e.type==='back'?'돌아왔어요':e.type==='poo'&&e.place==='pants'?'응가 실수 (팬티)':e.type==='poo'&&e.place?`응가 · ${PLACES[e.place].slice(0,-1)}`:T.label;
   const detail=e.type==='memo'?'메모':(I.detail||'');
   const gap=I.gap?`<span class="gap ${I.gap.kind}${I.gap.sleep?' sl':''}"><small>${I.gap.label}</small><b>${fmtDur(I.gap.ms)}</b></span>`:'<span></span>';
-  return `<button class="row" data-edit="${e.id}"><span class="tm">${fmtTime(e.t)}</span><span class="bub ${T.cls}" aria-hidden="true">${(CH[e.type]||CH.memo)()}</span><span class="txt"><div class="nm">${name}</div>${detail?`<div class="dt">${detail}</div>`:''}</span>${gap}</button>`;
+  return `<button class="row" data-edit="${e.id}"><span class="tm">${fmtTime(e.t)}</span><span class="bub ${T.cls}" aria-hidden="true">${e.type==='out'&&e.place==='outing'?'🚗':(CH[e.type]||CH.memo)()}</span><span class="txt"><div class="nm">${name}</div>${detail?`<div class="dt">${detail}</div>`:''}</span>${gap}</button>`;
 }
 function timeline(evs,A,isToday){
   if(!evs.length)return `<div class="empty">${isToday?'아직 오늘 기록이 없어요.<br>버튼을 누르면 지금 시간이 바로 저장돼요.':'이 날은 기록이 없어요.'}</div>`;
@@ -658,18 +660,17 @@ function ringSVG(from,A,isToday){
   
   for(let h=0;h<24;h++){const maj=h%3===0,[x1,y1]=P(h*60,maj?118:124),[x2,y2]=P(h*60,132);s+=`<line class="rtick${maj?' major':''}" x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"/>`}
   for(let h=0;h<24;h+=3){const [x,y]=P(h*60,143);const lab=h===0?'🌙':h===12?'☀️':h;s+=`<text class="rlab" x="${f(x)}" y="${f(y)}" text-anchor="middle" dominant-baseline="central"${typeof lab==='string'?' font-size="14"':''}>${lab}</text>`}
-  s+=`<circle class="rface" cx="150" cy="150" r="84"/>`;
   const to=from+DAY,nowT=Date.now();
-  for(const se of A.sleeps){const st=Math.max(se.start,from),en=Math.min(se.end??nowT,to);if(en>st){const m1=(st-from)/60000,m2=Math.max(m1+4,(en-from)/60000);s+=`<path class="rsleep" d="${arc(m1,Math.min(m2,1440),88)}"/>`}}
-  for(const se of A.aways){const st=Math.max(se.start,from),en=Math.min(se.end??nowT,to);if(en>st){const m1=(st-from)/60000,m2=Math.max(m1+4,(en-from)/60000);s+=`<path class="raway" d="${arc(m1,Math.min(m2,1440),88)}"/>`}}
+  for(const se of [...A.sleeps,...A.aways,...A.outings]){const st=Math.max(se.start,from),en=Math.min(se.end??nowT,to);if(en>st){const m1=(st-from)/60000,m2=Math.min(1440,Math.max(m1+3,(en-from)/60000));s+=`<path class="rrest" d="${wedge(m1,m2,132)}"/>`}}
+  s+=`<circle class="rface" cx="150" cy="150" r="84"/>`;
   for(const g of wearSegments(A,from,to)){const m1=(g.st-from)/60000,m2=Math.min(1440,Math.max(m1+3,(g.en-from)/60000));s+=`<path class="${g.kind==='pants'?'rband':'rdiaper'}" d="${arc(m1,m2,101)}"/>`}
-  for(const e of evsIn(A,from,to)){if(e.type==='memo'||e.type==='sleep'||e.type==='wake'||e.type==='out'||e.type==='back')continue;const onBand=e.type==='pantsOn'||e.type==='diaper';const [x,y]=P(minOfDay(e.t),onBand?101:116);s+=`<circle class="dot ${e.type}${onBand?' onband':''}" cx="${f(x)}" cy="${f(y)}" r="${e.type==='pee'?8:7}"/>`}
+  for(const e of evsIn(A,from,to)){if(!(isPee(e)||e.type==='poo'))continue;const onBand=false;const [x,y]=P(minOfDay(e.t),onBand?101:116);s+=`<circle class="dot ${e.type}${onBand?' onband':''}" cx="${f(x)}" cy="${f(y)}" r="${e.type==='pee'?8:7}"/>`}
   if(isToday){const m=minOfDay(nowT),[x1,y1]=P(m,88),[x2,y2]=P(m,128);s+=`<line class="hand" x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"/><circle class="handtip" cx="${f(x2)}" cy="${f(y2)}" r="3.5"/>`}
   return s+'</svg>';
 }
 function ringCard(from,A,isToday,center){
   return `<div class="ringbox">${ringSVG(from,A,isToday)}<div class="ring-center">${center}</div></div>
-  <div class="legend"><span><i style="background:var(--pee-dot)"></i>쉬</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i style="background:var(--oops-dot)"></i>실수</span><span><i style="background:var(--diaper-dot)"></i>기저귀로 변경</span><span><i class="band"></i>팬티 착용</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀 착용</span><span><i style="background:var(--dry-dot)"></i>뽀송</span><span><i class="band" style="background:var(--sleep-band)"></i>잠</span><span><i class="band" style="background:var(--away-band)"></i>어린이집</span></div>`;
+  <div class="legend"><span><i style="background:var(--pee-dot)"></i>쉬</span><span><i style="background:var(--oops-dot)"></i>실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div>`;
 }
 function daySummary(evs){
   const ints=peeIntervals(evs),p=[];
@@ -683,7 +684,7 @@ function daySummary(evs){
 
 
 /* ---------- daily report + Claude advice ---------- */
-function evLabel(e){if(e.type==='memo')return '메모: '+(e.text||'');if(e.type==='poo')return e.place==='pants'?'응가 실수(팬티에)':e.place?`응가(${PLACES[e.place].slice(0,-1)})`:'응가';if(e.type==='accident')return '쉬 실수(팬티에)';return TYPES[e.type]?.label||e.type}
+function evLabel(e){if(e.type==='out')return e.place==='outing'?'외출 시작(부모와 함께)':'등원(어린이집)';if(e.type==='back')return '귀가';if(e.type==='memo')return '메모: '+(e.text||'');if(e.type==='poo')return e.place==='pants'?'응가 실수(팬티에)':e.place?`응가(${PLACES[e.place].slice(0,-1)})`:'응가';if(e.type==='accident')return '쉬 실수(팬티에)';return TYPES[e.type]?.label||e.type}
 function dayStats(A,from){
   const evs=evsIn(A,from,from+DAY),ints=peeIntervals(evs);
   const segs=wearSegments(A,from,from+DAY),pantsMs=segs.filter(g=>g.kind==='pants').reduce((a,g)=>a+g.en-g.st,0);
@@ -706,7 +707,8 @@ function reportPrompt(from){
 [기록 용어]
 - 쉬 실수/응가 실수 = 팬티에 한 것. 실수 후 10분 안에 변기에서 이어 한 쉬는 한 번으로 계산됨.
 - 쉬텀 = 쉬와 쉬 사이 간격(잠든 시간이나 어린이집에 간 시간이 끼면 평균에서 제외).
-- 등원~하원 = 어린이집에 있던 시간. 이 사이 기록은 대부분 비어 있으니 실수나 공백으로 보지 말 것.
+- 등원~귀가 = 어린이집에 있던 시간. 이 사이 기록은 대부분 비어 있으니 실수나 공백으로 보지 말 것(쉬텀 계산에서도 제외).
+- 외출 시작~귀가 = 부모와 함께 밖에 있던 시간. 이 사이 쉬는 정상적으로 기록·계산됨. 외출 중 패턴(참기, 낯선 화장실)도 참고할 것.
 - 뽀송 = 기저귀/팬티를 확인했는데 젖지 않음. "마지막 쉬 후 X 동안 뽀송"은 그만큼 참았다는 뜻.
 - 팬티 착용/기저귀로 변경 = 그 시간대에 무엇을 입었는지.
 - 기록이 빠진 시간이 있을 수 있음(어린이집, 외출 등). 없는 기록을 실패로 단정하지 말 것.
@@ -827,7 +829,7 @@ function renderToday(){
   const wearing=A.pStart!=null;
   const lastDiaper=[...A.asc].reverse().find(e=>e.type==='diaper');
   const stPants=wearing?`<span class="st pants">🩲 팬티 착용 중 · ${fmtDur(now-A.pStart)}째</span>`:`<span class="st diaper">🧷 기저귀${lastDiaper?` · ${whenLabel(lastDiaper.t)}부터`:''}</span>`;
-  const stAway=A.away?`<span class="st" style="background:var(--away);color:var(--away-ink)">🎒 어린이집 · ${fmtDur(now-A.awayStart)}째</span>`:'';
+  const stAway=A.away?`<span class="st" style="background:var(--away);color:var(--away-ink)">${A.awayKind==='outing'?'🚗 외출':'🎒 어린이집'} · ${now-A.awayStart<60000?'방금':fmtDur(now-A.awayStart)+'째'}</span>`:'';
   const stSleep=A.sleeping?`<span class="st sleep">😴 자는 중 · ${fmtDur(now-A.sleepStart)}째</span>`:'';
   const stPoo=`<span class="st poo">💩 ${A.lastPoo?`마지막 응가 ${whenLabel(A.lastPoo.t)}`:'응가 기록 없음'}</span>`;
   const mini=(l,v)=>`<div class="mini"><div class="l">${l}</div><div class="v num">${v}</div></div>`;
@@ -840,7 +842,7 @@ function renderToday(){
     <div class="minis">${mini('평균 쉬텀',ints.length?fmtDur(avg(ints)):'–')}${mini('가장 짧은',ints.length?fmtDur(Math.min(...ints)):'–')}${mini('가장 긴',ints.length?fmtDur(Math.max(...ints)):'–')}</div>
     <div class="states">${stAway}${stSleep}${stPoo}</div>
   </section>
-  <div class="tools"><span class="tt">오늘도 콕콕 기록해요</span><div class="right"><button class="awaybtn${A.away?' on':''}" data-rec="${A.away?'back':'out'}">${A.away?`🏠 하원 <small>${now-A.awayStart<60000?'방금 등원':fmtDur(now-A.awayStart)+'째'}</small>`:'🎒 등원'}</button>
+  <div class="tools"><span class="tt">오늘도 콕콕 기록해요</span><div class="right">${A.away?`<button class="awaybtn on" data-rec="back">🏠 돌아왔어요 <small>${A.awayKind==='outing'?'외출':'어린이집'} ${now-A.awayStart<60000?'방금':fmtDur(now-A.awayStart)+'째'}</small></button>`:S.awayPick?`<button class="awaybtn pick" data-out="daycare">🎒 어린이집</button><button class="awaybtn pick" data-out="outing">🚗 외출</button>`:`<button class="awaybtn" data-awaypick="1">🎒 나가요</button>`}
     <div class="wearmini" role="group" aria-label="지금 입은 것: ${wearing?'팬티':'기저귀'}">
       <button class="wi pants${wearing?' on':''}" data-wear="pantsOn" aria-pressed="${wearing}" aria-label="팬티 입었어요" title="팬티">${CH.pantsOn()}</button>
       <button class="wi diaper${!wearing?' on':''}" data-wear="diaper" aria-pressed="${!wearing}" aria-label="기저귀로 바꿨어요" title="기저귀">${CH.diaper()}</button>
@@ -875,17 +877,16 @@ function renderRecords(){
     const d0=new Date(S.cursor),mon=sod(addDays(S.cursor,-((d0.getDay()+6)%7))),sun=addDays(mon,6),todayK=dayKey(Date.now());
     const rows=[];let allInts=[],poos=0,accs=0;
     for(let i=6;i>=0;i--){const from=addDays(mon,i),evs=evsIn(A,from,from+DAY),ints=peeIntervals(evs);allInts.push(...ints);poos+=cnt(evs,'poo');accs+=accCnt(evs);
-      const dt=new Date(from);let strip='';for(const se of A.sleeps){const st=Math.max(se.start,from),en=Math.min(se.end??Date.now(),from+DAY);if(en>st)strip+=`<span class="nt" style="left:${(st-from)/DAY*100}%;width:${(en-st)/DAY*100}%"></span>`}
-      for(const se of A.aways){const st=Math.max(se.start,from),en=Math.min(se.end??Date.now(),from+DAY);if(en>st)strip+=`<span class="at" style="left:${(st-from)/DAY*100}%;width:${(en-st)/DAY*100}%"></span>`}
+      const dt=new Date(from);let strip='';for(const se of [...A.sleeps,...A.aways,...A.outings]){const st=Math.max(se.start,from),en=Math.min(se.end??Date.now(),from+DAY);if(en>st)strip+=`<span class="nt" style="left:${(st-from)/DAY*100}%;width:${(en-st)/DAY*100}%"></span>`}
       for(const g of wearSegments(A,from,from+DAY))strip+=`<span class="${g.kind==='pants'?'pb':'db'}" style="left:${(g.st-from)/DAY*100}%;width:${Math.max(.8,(g.en-g.st)/DAY*100)}%"></span>`;
-      for(const e of evs){if(e.type==='memo'||e.type==='out'||e.type==='back')continue;strip+=`<span class="pd ${e.type}" style="left:${minOfDay(e.t)/14.4}%"></span>`}
+      for(const e of evs){if(!(isPee(e)||e.type==='poo'))continue;strip+=`<span class="pd ${e.type}" style="left:${minOfDay(e.t)/14.4}%"></span>`}
       const sum=evs.length?`💧 <b>${peeCnt(evs)}</b>${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>${accCnt(evs)?` · 💦 <b>${accCnt(evs)}</b>`:''}`:'기록 없음';
       rows.push(`<button class="wrow${dayKey(from)===todayK?' is-today':''}" data-day="${from}"><span class="dl"><b>${DOW[dt.getDay()]}</b>${dt.getMonth()+1}/${dt.getDate()}</span><span class="strip">${strip}</span><span class="wsum">${sum}</span></button>`)}
     body=`<div class="navbar"><button class="navbtn" data-move="-7" aria-label="이전 주">‹</button><div class="ttl">${fmtDay(mon,false)} – ${fmtDay(sun,false)}</div><button class="navbtn" data-move="7" aria-label="다음 주">›</button></div>
     <section class="card"><h2>이번 주 <span>최근 날짜가 위 · 눌러서 하루 보기</span></h2>
       <div class="axis"><span></span><div class="hrs"><span style="left:0">0시</span><span style="left:25%">6</span><span style="left:50%">12</span><span style="left:75%">18</span><span style="left:100%">24</span></div></div>
       ${rows.join('')}
-      <div class="legend"><span><i style="background:var(--pee-dot)"></i>쉬</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i style="background:var(--oops-dot)"></i>실수</span><span><i style="background:var(--diaper-dot)"></i>기저귀로 변경</span><span><i class="band"></i>팬티 착용</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀 착용</span><span><i style="background:var(--dry-dot)"></i>뽀송</span><span><i class="band" style="background:var(--sleep-band)"></i>잠</span><span><i class="band" style="background:var(--away-band)"></i>어린이집</span></div></section>`;
+      <div class="legend"><span><i style="background:var(--pee-dot)"></i>쉬</span><span><i style="background:var(--oops-dot)"></i>실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div></section>`;
   } else {
     const c=new Date(S.cursor),y=c.getFullYear(),m=c.getMonth(),first=new Date(y,m,1),lead=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),todayK=dayKey(Date.now());
     let cells=['월','화','수','목','금','토','일'].map(w=>`<div class="wd${w==='일'?' sun':w==='토'?' sat':''}">${w}</div>`).join('');
@@ -989,10 +990,10 @@ function burst(el,icon){
 }
 function doRecord(k,el,extra){
   if(el)burst(el,TYPES[k].icon);
-  S.say={text:extra&&extra.place==='pants'?'괜찮아요, 기록해 둘게요 🫧':SAY[k],until:Date.now()+3000};
+  S.say={text:extra&&extra.place==='pants'?'괜찮아요, 기록해 둘게요 🫧':k==='out'&&extra&&extra.place==='outing'?'즐거운 외출! 🚗':SAY[k],until:Date.now()+3000};
   setTimeout(()=>{if(!$('#sheetHost').innerHTML&&!(document.activeElement&&document.activeElement.tagName==='INPUT'))render()},3100);
   return addEvent({type:k,t:Date.now(),...(extra||{})}).then(id=>{
-    const A=analyze(),I=A.info[id]||{};let msg=`${TYPES[k].icon} ${fmtTime(Date.now())} ${extra&&extra.place==='pants'?'응가 실수 기록':TYPES[k].done}`;
+    const A=analyze(),I=A.info[id]||{};let msg=`${TYPES[k].icon} ${fmtTime(Date.now())} ${extra&&extra.place==='pants'?'응가 실수 기록':k==='out'?(extra&&extra.place==='outing'?'외출 기록':'등원 기록'):TYPES[k].done}`;
     if(I.cont)msg+=' · 바로 전 쉬와 한 번으로 계산';else if(k==='accident'&&I.pants)msg+=` · ${I.pants}`;if(I.gap)msg+=` · ${I.gap.label} ${fmtDur(I.gap.ms)}`;else if(I.detail&&(k==='poo'||k==='dry'||k==='wake'||k==='back'))msg+=` · ${I.detail}`;
     toast(msg,id,k==='poo'&&!(extra&&extra.place));
     const b=document.querySelector(`[data-rec="${k}"]`);if(b){b.classList.add('flash');setTimeout(()=>b.classList.remove('flash'),500)}
@@ -1031,6 +1032,8 @@ function openSettings(){
 document.addEventListener('click',ev=>{
   const rec=ev.target.closest('[data-rec]');
   if(rec){doRecord(rec.dataset.rec,rec);return}
+  if(ev.target.closest('[data-awaypick]')){S.awayPick=true;render();clearTimeout(window.__apk);window.__apk=setTimeout(()=>{if(S.awayPick){S.awayPick=false;render()}},6000);return}
+  const ob=ev.target.closest('[data-out]');if(ob){S.awayPick=false;doRecord('out',ob,{place:ob.dataset.out});return}
   const rd=ev.target.closest('[data-repday]');if(rd){S.repDay=+rd.dataset.repday;S.repErr='';render();return}
   if(ev.target.closest('#repAsk')){if(!S.repBusy)askAdvice();return}
   if(ev.target.closest('#repStop')){repCtl&&repCtl.abort();return}
