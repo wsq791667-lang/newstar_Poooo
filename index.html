@@ -405,7 +405,26 @@ body{overflow-x:hidden}
 .advsec.pat{background:var(--oops)}.advsec.pat h3{color:var(--oops-ink)}
 .advsec.plan{background:var(--pee)}.advsec.plan h3{color:var(--pee-ink)}
 .advsec.plan ol,.planlist{list-style:none;padding-left:0}
-.advsec.plan li,.planlist li{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+.advsec.plan li,.planlist li{display:block;min-width:0}
+.planlist li .pt{display:inline-block;margin-bottom:3px}
+.planlist li .pa{display:block;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.planlist li+li{border-top:2px dashed var(--line);padding-top:8px}
+details summary{list-style:none;cursor:pointer}details summary::-webkit-details-marker{display:none}
+.more{display:inline-flex;align-items:center;gap:4px;font-family:var(--f-display);font-size:14px;color:var(--pee-ink);background:var(--pee);border-radius:999px;padding:3px 12px;white-space:nowrap}
+.more::after{content:"▾";font-size:11px;transition:transform .2s}
+details[open] .more{background:var(--soft);color:var(--muted)}details[open] .more::after{transform:rotate(180deg)}
+details[open]>summary .more{font-size:0;padding:3px 10px}details[open]>summary .more::before{content:"접기";font-size:14px}
+.plancard summary{display:grid;grid-template-columns:1fr auto;grid-template-areas:"t m" "p p";align-items:center;gap:6px 8px}
+.plancard .pc-t{grid-area:t;font-family:var(--f-display);font-size:19px;display:flex;align-items:center;gap:4px;min-width:0}
+.plancard .pc-t small{font-family:var(--f-body);font-size:12px;color:var(--muted);margin-left:4px}
+.plancard .more{grid-area:m}
+.plancard .pc-peek{grid-area:p;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.plancard[open] .pc-peek{display:none}
+.plancard .planlist{margin-top:12px}
+.advpeek{margin:0;font-size:14px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.chips2{display:flex;flex-wrap:wrap;gap:6px}.chips2 .pt{background:var(--pee);font-size:13px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.advfull>summary{text-align:center;padding:4px 0}
+.advfull[open]{display:flex;flex-direction:column;gap:12px}
 .pt{font-family:var(--f-display);font-size:14px;background:var(--surface);color:var(--pee-ink);border-radius:12px;padding:2px 10px;max-width:100%;overflow-wrap:anywhere}
 .pt:empty{display:none}
 .planlist{margin:0;display:flex;flex-direction:column;gap:8px;font-size:15px}
@@ -685,14 +704,20 @@ ${hist.join('\n')||'(이전 기록 없음)'}
 function repDays(){const now=Date.now(),y=sod(addDays(now,-1)),t=sod(now);return {y,t}}
 function renderAdvice(r){
   if(!r||!r.data)return '';
-  const d=r.data,L=(a)=>Array.isArray(a)?a:[];
+  const d=r.data,L=a=>Array.isArray(a)?a:[];
+  const sec=(cls,ic,t,items)=>items.length?`<div class="advsec ${cls}"><h3>${mi(ic)}${t}</h3><ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'';
+  const plan=L(d.plan);
   return `<div class="adv">
-    ${L(d.summary).length?`<div class="advsec"><h3>${mi('pee')}한눈에</h3><ul>${L(d.summary).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
-    ${L(d.good).length?`<div class="advsec good"><h3>${mi('dry')}잘 되고 있어요</h3><ul>${L(d.good).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
-    ${L(d.patterns).length?`<div class="advsec pat"><h3>${mi('accident')}눈여겨볼 점</h3><ul>${L(d.patterns).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
-    ${L(d.plan).length?`<div class="advsec plan"><h3>${mi('wake')}오늘 해 볼 것</h3><ol>${L(d.plan).map(x=>`<li><span class="pt">${esc(x.time||'')}</span><span>${esc(x.action||'')}</span></li>`).join('')}</ol></div>`:''}
-    ${d.caution?`<div class="caution">🩺 ${esc(d.caution)}</div>`:''}
     ${d.cheer?`<div class="tip">${MASCOT(true)}<div class="say">${esc(d.cheer)}</div></div>`:''}
+    ${L(d.summary)[0]?`<p class="advpeek">${esc(L(d.summary)[0])}</p>`:''}
+    ${plan.length?`<div class="chips2">${plan.map(x=>`<span class="pt">${esc(x.time||'오늘')}</span>`).join('')}</div>`:''}
+    ${d.caution?`<div class="caution">🩺 ${esc(d.caution)}</div>`:''}
+    <details class="advfull"><summary><span class="more">조언 전체 보기</span></summary>
+      ${sec('', 'pee','한눈에',L(d.summary))}
+      ${sec('good','dry','잘 되고 있어요',L(d.good))}
+      ${sec('pat','accident','눈여겨볼 점',L(d.patterns))}
+      ${plan.length?`<div class="advsec plan"><h3>${mi('wake')}오늘 해 볼 것</h3><ol class="planlist">${plan.map(x=>`<li>${x.time?`<span class="pt">${esc(x.time)}</span>`:''}<span class="pa">${esc(x.action||'')}</span></li>`).join('')}</ol></div>`:''}
+    </details>
     <div class="advmeta">${new Date(r.at).getMonth()+1}/${new Date(r.at).getDate()} ${fmtTime(r.at)}에 받은 조언 · AI가 기록을 보고 쓴 참고용 조언이에요</div>
   </div>`;
 }
@@ -763,7 +788,9 @@ async function askAdvice(){
 }
 function planCardToday(){
   const {y}=repDays(),r=S.reports[dayKey(y)];if(!r||!r.data||!Array.isArray(r.data.plan)||!r.data.plan.length)return '';
-  return `<section class="card plancard"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('wake')}오늘의 작전</span> <span>어제 리포트에서</span></h2><ol class="planlist">${r.data.plan.map(x=>`<li><span class="pt">${esc(x.time||'')}</span><span>${esc(x.action||'')}</span></li>`).join('')}</ol></section>`;
+  const pl=r.data.plan;
+  return `<details class="card plancard"><summary><span class="pc-t">${mi('wake')}오늘의 작전 <small>${pl.length}가지</small></span><span class="pc-peek">${esc(pl[0].time||pl[0].action||'')}${pl.length>1?` 외 ${pl.length-1}개`:''}</span><span class="more">전체 보기</span></summary>
+    <ol class="planlist">${pl.map(x=>`<li>${x.time?`<span class="pt">${esc(x.time)}</span>`:''}<span class="pa">${esc(x.action||'')}</span></li>`).join('')}</ol></details>`;
 }
 
 /* ---------- screens ---------- */
