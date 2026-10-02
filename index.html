@@ -476,7 +476,11 @@ const CH={
  wake:()=>`<svg viewBox="0 0 48 48"><g stroke="#E0A21B" stroke-width="2.4" stroke-linecap="round"><path d="M24 3v5M24 40v5M3 24h5M40 24h5M9 9l3.5 3.5M35.5 35.5 39 39M9 39l3.5-3.5M35.5 12.5 39 9"/></g><circle cx="24" cy="24" r="12" fill="#FFD66B" stroke="#E0A21B" stroke-width="2.2"/>${face(20,28,23)}${blush(16.5,31.5,27)}</svg>`,
  memo:()=>'📝'
 };
-function monthsNow(){if(S.birth&&/^\d{4}-\d{2}$/.test(S.birth)){const [y,m]=S.birth.split('-').map(Number),n=new Date();const mo=(n.getFullYear()-y)*12+(n.getMonth()+1-m);return mo>=0&&mo<120?String(mo):''}return S.months||''}
+function ageOf(b){if(!b||!/^\d{4}-\d{2}-\d{2}$/.test(b))return null;const [y,m,d]=b.split('-').map(Number),n=new Date();
+  let mo=(n.getFullYear()-y)*12+(n.getMonth()+1-m);if(n.getDate()<d)mo--;if(mo<0||mo>=120)return null;
+  const last=new Date(y,m-1+mo,d);const days=Math.floor((sod(n)-sod(last))/DAY);return {mo,days}}
+function monthsNow(){const a=ageOf(S.birth);return a?String(a.mo):(S.months||'')}
+const ageText=b=>{const a=ageOf(b);return a?`지금 <b>${a.mo}개월${a.days?` ${a.days}일`:''}</b>이에요. 날짜가 지나면 저절로 늘어나요.`:'생일을 넣으면 개월 수가 자동으로 계산돼요. 리포트 조언이 나이에 맞춰져요.'};
 const nameI=()=>{const n=S.name||'우리 아이';const c=n.charCodeAt(n.length-1);return (c>=0xAC00&&c<=0xD7A3&&(c-0xAC00)%28)?n+'이':n};
 const mi=k=>`<i class="mi" aria-hidden="true">${CH[k]()}</i>`;
 const PLACES={potty:'변기에',diaper:'기저귀에',pants:'팬티에'};
@@ -987,8 +991,8 @@ function openSettings(){
   $('#sheetHost').innerHTML=`<div class="veil" id="veil"><div class="sheet" role="dialog" aria-modal="true" aria-label="아이 정보">
     <h3>${MASCOT(true).replace('class="mascot','style="width:34px;height:40px;vertical-align:-10px;margin-right:6px" class="mascot')}아이 정보</h3>
     <label class="memo-field">이름<input id="setName" maxlength="10" value="${esc(S.name)}" placeholder="예: 새별"></label>
-    <label class="memo-field">태어난 달<input id="setBirth" type="month" value="${esc(S.birth)}"></label>
-    <div class="note2" id="setAge" style="margin-top:-6px">${mo?`지금 <b>${mo}개월</b>이에요. 달이 바뀌면 저절로 늘어나요.`:'태어난 달을 넣으면 개월 수가 자동으로 계산돼요. 리포트 조언이 나이에 맞춰져요.'}</div>
+    <label class="memo-field">생일<input id="setBirth" type="date" value="${/^\d{4}-\d{2}-\d{2}$/.test(S.birth)?esc(S.birth):''}"></label>
+    <div class="note2" id="setAge" style="margin-top:-6px">${/^\d{4}-\d{2}$/.test(S.birth)?'예전엔 태어난 달만 넣어서 개월 수가 1개월 많게 나왔을 수 있어요. 생일을 다시 넣어 주세요.':ageText(S.birth)}</div>
     ${typeof IS_PWA!=='undefined'?`<label class="memo-field">AI 조언용 API 키 (ChatGPT/OpenAI, 선택)<input id="setKey" type="password" autocomplete="off" placeholder="sk-…" value="${esc(getKey())}"></label><div class="note2" style="margin-top:-6px">키는 이 폰에만 저장되고 백업 파일에도 들어가지 않아요. 비워 두면 조언 받기가 꺼져요.</div>`:''}
     ${typeof IS_PWA!=='undefined'?`<div class="flabel">백업 · 기록은 이 폰 안에만 저장돼요</div><div class="acts"><button class="cancel" id="bkExport">내보내기</button><button class="cancel" id="bkImport">불러오기</button></div><input type="file" id="bkFile" accept="application/json,.json" hidden>`:''}
     <div class="acts"><button class="cancel" id="sCancel">닫기</button><button class="save" id="setSave">저장</button></div>
@@ -996,8 +1000,8 @@ function openSettings(){
   const close=()=>{$('#sheetHost').innerHTML=''};
   $('#veil').onclick=ev=>{if(ev.target.id==='veil')close()};
   $('#sCancel').onclick=close;
-  $('#setBirth').oninput=()=>{const b=$('#setBirth').value,keep=S.birth;S.birth=b;const m=monthsNow();S.birth=keep;$('#setAge').innerHTML=m?`지금 <b>${m}개월</b>이에요. 달이 바뀌면 저절로 늘어나요.`:'태어난 달을 넣으면 개월 수가 자동으로 계산돼요.'};
-  $('#setSave').onclick=()=>{if($('#setKey'))setKey($('#setKey').value.trim());S.name=$('#setName').value.trim();S.birth=$('#setBirth').value||'';if(S.birth)S.months='';close();render();saveSettings();toast('저장했어요')};
+  $('#setBirth').oninput=()=>{$('#setAge').innerHTML=ageText($('#setBirth').value)};
+  $('#setSave').onclick=()=>{if($('#setKey'))setKey($('#setKey').value.trim());S.name=$('#setName').value.trim();S.birth=$('#setBirth').value||(/^\d{4}-\d{2}$/.test(S.birth)?S.birth:'');if(S.birth)S.months='';close();render();saveSettings();toast('저장했어요')};
 }
 /* ---------- interactions ---------- */
 document.addEventListener('click',ev=>{
