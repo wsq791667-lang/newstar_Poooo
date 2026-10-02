@@ -391,7 +391,13 @@ nav button[aria-current="page"] .e{filter:none;opacity:1;animation:wig .5s ease}
 .askbtn .mi{width:26px;height:26px}.askbtn:active{transform:translate(3px,4px);box-shadow:none}.askbtn[disabled]{opacity:.45}
 .thinking{display:flex;align-items:center;gap:10px;padding:10px 0}.thinking .mascot{width:44px;height:50px;animation:hop 1s ease infinite}
 .thinking .say{background:var(--pee);color:var(--pee-ink)}
-.adv{display:flex;flex-direction:column;gap:12px}
+.adv{display:flex;flex-direction:column;gap:12px;min-width:0}
+.adv,.adv *{overflow-wrap:anywhere;word-break:keep-all}
+.advsec{min-width:0;overflow:hidden}
+.tip{min-width:0}.tip .say{min-width:0;flex:1;overflow-wrap:anywhere}
+.card{min-width:0;max-width:100%}
+.wrap>*{min-width:0}
+body{overflow-x:hidden}
 .advsec{border-radius:20px;padding:12px 14px;background:var(--soft);border:2px solid var(--sticker)}
 .advsec h3{margin:0 0 6px;font-family:var(--f-display);font-weight:400;font-size:17px;display:flex;align-items:center;gap:4px}
 .advsec ul,.advsec ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:15px;line-height:1.5}
@@ -399,8 +405,9 @@ nav button[aria-current="page"] .e{filter:none;opacity:1;animation:wig .5s ease}
 .advsec.pat{background:var(--oops)}.advsec.pat h3{color:var(--oops-ink)}
 .advsec.plan{background:var(--pee)}.advsec.plan h3{color:var(--pee-ink)}
 .advsec.plan ol,.planlist{list-style:none;padding-left:0}
-.advsec.plan li,.planlist li{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:baseline}
-.pt{font-family:var(--f-display);font-size:14px;background:var(--surface);color:var(--pee-ink);border-radius:999px;padding:1px 10px;white-space:nowrap}
+.advsec.plan li,.planlist li{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+.pt{font-family:var(--f-display);font-size:14px;background:var(--surface);color:var(--pee-ink);border-radius:12px;padding:2px 10px;max-width:100%;overflow-wrap:anywhere}
+.pt:empty{display:none}
 .planlist{margin:0;display:flex;flex-direction:column;gap:8px;font-size:15px}
 .plancard{background:linear-gradient(160deg,var(--surface) 55%,var(--pee))}
 .caution{background:var(--pants);color:var(--pants-ink);border-radius:16px;padding:10px 12px;font-size:14px;font-weight:700}
