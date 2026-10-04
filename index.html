@@ -207,7 +207,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .ringbox svg{width:100%;height:100%;display:block}
 .ring-center{position:absolute;inset:30%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none}
 .ring-center .l{font-size:12px;color:var(--muted)}
-.ring-center .v{font-family:var(--f-display);font-size:22px;line-height:1.2}
+.ring-center .v{font-family:var(--f-display);font-size:30px;line-height:1.15}
+.ring-center .s{font-size:13px}
+.legend-d{text-align:center;margin-top:6px}.legend-d .legend{margin-top:8px}
+.ringcard{padding-top:10px!important}
 .ring-center .s{font-size:12px;color:var(--muted)}
 .rbg{fill:var(--soft)} .rnight{fill:var(--night)} .rface{fill:var(--surface)}
 .rtick{stroke:var(--line);stroke-width:1.5} .rtick.major{stroke:var(--muted);stroke-width:2}
@@ -441,6 +444,7 @@ details[open]>summary .more{font-size:0;padding:3px 10px}details[open]>summary .
 .ob-h{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}.ob-h b{font-family:var(--f-display);font-weight:400;font-size:18px}.ob-h span{color:var(--muted)}.ob-h span b{color:var(--pee-ink);font-size:18px}
 .ob-bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--soft);border:2px solid var(--sticker);gap:2px}
 .ob-bar i{display:block;min-width:6px}.ob-bar i.ok{background:var(--pee-dot)}.ob-bar i.close{background:var(--close-dot)}.ob-bar i.oops{background:var(--oops-dot)}
+.cd{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:3px;vertical-align:0}.cd.ok{background:var(--pee-dot)}.cd.close{background:var(--close-dot)}.cd.oops{background:var(--oops-dot)}
 .ob-l{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--muted)}.ob-l b{color:var(--ink);font-family:var(--f-display);font-weight:400;font-size:15px}.ob-l .zero{opacity:.45}
 .ob.cmp{margin:0;background:var(--surface);border-radius:16px;padding:8px 10px}.ob.cmp .ob-bar{height:10px}.ob.cmp .ob-l{font-size:12px}.ob .rt{margin-left:auto}.ob .rt b{color:var(--pee-ink)}
 .sline{font-size:14px;margin-bottom:10px}.sline b{font-family:var(--f-display);font-weight:400;font-size:17px;color:var(--pee-ink)}.sline small{color:var(--muted)}
@@ -581,7 +585,7 @@ function analyze(){
     const I=info[e.id]={detail:'',gap:null};
     if(isPee(e)&&lastPee&&e.t-lastPee.t<MERGE){I.cont=true;if(lastPee.type==='accident'&&e.type==='pee'&&info[lastPee.id])info[lastPee.id].rescued=true;I.detail=`${fmtTime(lastPee.t)} ${lastPee.type==='accident'?'실수':'쉬'}에 이어서 · 한 번으로 계산`;lastPee=e}
     else if(isPee(e)){let base;const slp=lastPee&&onlySleptBetween(lastPee.t,e.t),aw=lastPee&&awayBetween(lastPee.t,e.t),sl=slp||aw;
-      if(lastPee&&dayKey(lastPee.t)===dayKey(e.t)){I.gap={kind:'pee',label:aw?'어린이집 포함':slp?'잠 포함':'쉬텀',ms:e.t-lastPee.t,sleep:sl};base=`이전 쉬 ${fmtTime(lastPee.t)}${lastPee.type==='accident'?'(실수)':''}`}else base='오늘 첫 쉬';
+      if(lastPee&&dayKey(lastPee.t)===dayKey(e.t)){I.gap={kind:'pee',label:aw?'어린이집 포함':slp?'잠 포함':'쉬텀',ms:e.t-lastPee.t,sleep:sl};base=''}else base='';
       if(lastWake&&(!lastPee||lastWake.t>lastPee.t))base=`일어나고 ${fmtDur(e.t-lastWake.t)} 후 첫 쉬`;
       if(lastBack&&(!lastPee||lastBack.t>lastPee.t)&&(!lastWake||lastBack.t>lastWake.t))base=`하원하고 ${fmtDur(e.t-lastBack.t)} 후 첫 쉬`;
       I.detail=base;lastPee=e}
@@ -593,11 +597,11 @@ function analyze(){
     else if(e.type==='wake'){lastWake=e;const sp=sleeps.find(x=>x.end===e.t);if(sp)I.detail=`${fmtDur(sp.end-sp.start)} 잤어요`}
     else if(e.type==='sleep'){I.detail=lastPee?`마지막 쉬 ${fmtTime(lastPee.t)}`:''}
     else if(e.type==='dry'){if(lastPee){I.dryMs=e.t-lastPee.t;I.detail=`마지막 쉬 후 ${fmtDur(I.dryMs)} 동안 뽀송`}else I.detail='기저귀 뽀송'}
-    else if(e.type==='accident'){if(pStart!=null){I.pants=`팬티 착용 ${fmtDur(e.t-pStart)} 후`;I.detail=I.pants+' · '+I.detail}}
+    else if(e.type==='accident'){if(pStart!=null){I.pants=`팬티 착용 ${fmtDur(e.t-pStart)} 후`;I.detail=I.pants+(I.detail?' · '+I.detail:'')}}
     else if(e.type==='diaper'){if(pStart!=null){I.detail=`팬티 착용시간 ${fmtDur(e.t-pStart)}`;sessions.push({start:pStart,end:e.t})}pStart=null}
   }
   {let la=null;for(const e of asc){if(e.type!=='accident')continue;const I=info[e.id];if(la&&e.t-la.t<MERGE){I.again=true;I.detail=`${fmtTime(la.t)} 실수와 같은 실수 · 한 번으로 계산`;I.gap=null;if(I.rescued&&info[la.id])info[la.id].rescued=true}else la=e}}
-  for(const e of asc){const I=info[e.id];if(e.type==='accident'&&I&&I.rescued&&!I.again)I.detail='아깝다 💫 변기에서 마저 했어요 · '+I.detail}
+  for(const e of asc){const I=info[e.id];if(e.type==='accident'&&I&&I.rescued&&!I.again)I.detail='아깝다 · 변기에서 마저 했어요'+(I.detail?' · '+I.detail:'')}
   if(pStart!=null)sessions.push({start:pStart,end:null});
   return {asc,info,sessions,sleeps,lastPee,lastPoo,pStart,sleeping:sStart!=null,sleepStart:sStart,aways,outings,away:aStart!=null,awayStart:aStart,awayKind:aKind};
 }
@@ -616,7 +620,8 @@ const isPee=e=>e.type==='pee'||e.type==='accident';
 const MERGE=10*60000; /* 10분 안에 이어진 쉬(실수 후 변기 등)는 한 번으로 계산 */
 function peeEpisodes(evs){const p=evs.filter(isPee).sort((a,b)=>a.t-b.t),out=[];for(const e of p){const l=out[out.length-1];if(l&&e.t-l.end<MERGE){l.end=e.t;l.evs.push(e)}else out.push({start:e.t,end:e.t,evs:[e]})}
   for(const ep of out){const fa=ep.evs.findIndex(x=>x.type==='accident');ep.out=fa<0?'ok':ep.evs.slice(fa+1).some(x=>x.type==='pee')?'close':'oops'}return out}
-const OUT={ok:{ic:'🎯',l:'성공'},close:{ic:'💫',l:'아깝다'},oops:{ic:'💦',l:'실수'}};
+const OUT={ok:{ic:'<i class="cd ok"></i>',l:'성공'},close:{ic:'<i class="cd close"></i>',l:'아깝다'},oops:{ic:'<i class="cd oops"></i>',l:'실수'}};
+const cdot=k=>`<i class="cd ${k}"></i>`;
 function outcomes(evs){const c={ok:0,close:0,oops:0,total:0};for(const ep of peeEpisodes(evs)){c[ep.out]++;c.total++}c.rate=c.total?Math.round(c.ok/c.total*100):null;return c}
 function pooOut(evs){const p=evs.filter(e=>e.type==='poo');return {total:p.length,potty:p.filter(e=>e.place==='potty').length,pants:p.filter(e=>e.place==='pants').length,diaper:p.filter(e=>e.place==='diaper').length,none:p.filter(e=>!e.place).length}}
 function outcomeBar(c,compact){if(!c.total)return '';const ks=['ok','close','oops'];
@@ -635,7 +640,7 @@ const cnt=(evs,ty)=>evs.filter(e=>e.type===ty).length;
 const pooOopsCnt=evs=>evs.filter(e=>e.type==='poo'&&e.place==='pants').length;
 function accOnce(evs){const a=evs.filter(e=>e.type==='accident').sort((x,y)=>x.t-y.t),out=[];for(const e of a){if(out.length&&e.t-out[out.length-1].t<MERGE)continue;out.push(e)}return out}
 const peeOopsCnt=evs=>outcomes(evs).oops;
-const oopsText=evs=>{const c=outcomes(evs);return c.total?`🎯${c.ok} 💫${c.close} 💦${c.oops}`:''};
+const oopsText=evs=>{const c=outcomes(evs);return c.total?`성공 ${c.ok} · 아깝다 ${c.close} · 실수 ${c.oops}`:''};
 const accCnt=evs=>peeOopsCnt(evs)+evs.filter(e=>e.type==='poo'&&e.place==='pants').length;
 
 /* ---------- storage ---------- */
@@ -720,10 +725,10 @@ function ringSVG(from,A,isToday){
   const f=n=>n.toFixed(1);
   const arc=(m1,m2,r)=>{if(m2-m1>=1439)return `M${C} ${C-r}a${r} ${r} 0 1 1 -0.01 0`;const [x1,y1]=P(m1,r),[x2,y2]=P(m2,r);return `M${f(x1)} ${f(y1)}A${r} ${r} 0 ${m2-m1>720?1:0} 1 ${f(x2)} ${f(y2)}`};
   const wedge=(m1,m2,r)=>{const [x1,y1]=P(m1,r),[x2,y2]=P(m2,r);return `M${C} ${C}L${f(x1)} ${f(y1)}A${r} ${r} 0 ${m2-m1>720?1:0} 1 ${f(x2)} ${f(y2)}Z`};
-  let s=`<svg viewBox="0 0 300 300" role="img" aria-label="하루 시계 그래프"><circle class="rbg" cx="150" cy="150" r="132"/><circle cx="150" cy="150" r="128" fill="none" stroke="var(--surface)" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" opacity=".9"/>`;
+  let s=`<svg viewBox="0 0 300 300" role="img" aria-label="하루 시계 그래프"><circle class="rbg" cx="150" cy="150" r="132"/>`;
   
-  for(let h=0;h<24;h++){const maj=h%3===0,[x1,y1]=P(h*60,maj?118:124),[x2,y2]=P(h*60,132);s+=`<line class="rtick${maj?' major':''}" x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"/>`}
-  for(let h=0;h<24;h+=3){const [x,y]=P(h*60,143);const lab=h===0?'🌙':h===12?'☀️':h;s+=`<text class="rlab" x="${f(x)}" y="${f(y)}" text-anchor="middle" dominant-baseline="central"${typeof lab==='string'?' font-size="14"':''}>${lab}</text>`}
+  for(let h=0;h<24;h+=3){const maj=h%6===0,[x1,y1]=P(h*60,maj?120:125),[x2,y2]=P(h*60,132);s+=`<line class="rtick${maj?' major':''}" x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"/>`}
+  for(const h of [0,6,12,18]){const [x,y]=P(h*60,143);const lab=h===0?'🌙':h===12?'☀️':h;s+=`<text class="rlab" x="${f(x)}" y="${f(y)}" text-anchor="middle" dominant-baseline="central"${typeof lab==='string'?' font-size="14"':''}>${lab}</text>`}
   const to=from+DAY,nowT=Date.now();
   for(const se of [...A.sleeps,...A.aways,...A.outings]){const st=Math.max(se.start,from),en=Math.min(se.end??nowT,to);if(en>st){const m1=(st-from)/60000,m2=Math.min(1440,Math.max(m1+3,(en-from)/60000));s+=`<path class="rrest" d="${wedge(m1,m2,132)}"/>`}}
   s+=`<circle class="rface" cx="150" cy="150" r="84"/>`;
@@ -734,12 +739,12 @@ function ringSVG(from,A,isToday){
 }
 function ringCard(from,A,isToday,center){
   return `<div class="ringbox">${ringSVG(from,A,isToday)}<div class="ring-center">${center}</div></div>
-  <div class="legend"><span><i style="background:var(--pee-dot)"></i>🎯 성공</span><span><i style="background:var(--close-dot)"></i>💫 아깝다</span><span><i style="background:var(--oops-dot)"></i>💦 실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div>`;
+  <details class="legend-d" data-k="legend"${S.open.legend?' open':''}><summary><span class="more">색 설명</span></summary><div class="legend"><span><i style="background:var(--pee-dot)"></i>성공</span><span><i style="background:var(--close-dot)"></i>아깝다</span><span><i style="background:var(--oops-dot)"></i>실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div></details>`;
 }
 function peeDots(evs){const r=[];for(const ep of peeEpisodes(evs))r.push({t:ep.start,cls:ep.out,big:true});for(const e of evs)if(e.type==='poo')r.push({t:e.t,cls:'poo'+(e.place==='pants'?' poooops':''),big:false});return r}
 function daySummary(evs){
   const c=outcomes(evs),ints=peeIntervals(evs),po=pooOut(evs),p=[];
-  if(po.total)p.push(`<span class="pill poo">${mi('poo')}응가 <b>${po.total}회</b>${[po.potty?` · 🎯 ${po.potty}`:'',po.pants?` · 💦 ${po.pants}`:'',po.diaper?` · 🧷 ${po.diaper}`:''].join('')}</span>`);
+  if(po.total)p.push(`<span class="pill poo">${mi('poo')}응가 <b>${po.total}회</b>${[po.potty?` · 변기 ${po.potty}`:'',po.pants?` · 팬티 ${po.pants}`:'',po.diaper?` · 기저귀 ${po.diaper}`:''].join('')}</span>`);
   const pn=cnt(evs,'pantsOn');if(pn)p.push(`<span class="pill pants">${mi('pantsOn')}팬티 <b>${pn}회</b></span>`);
   const dr=cnt(evs,'dry');if(dr)p.push(`<span class="pill dry">${mi('dry')}뽀송 <b>${dr}회</b></span>`);
   return `${outcomeBar(c)||'<div class="empty" style="padding:6px">쉬 기록이 없어요</div>'}
@@ -760,7 +765,7 @@ function dayStats(A,from){
 }
 function reportPrompt(from){
   const A=analyze(),d=dayStats(A,from);
-  const lines=d.evs.map(e=>{const det=A.info[e.id]?.detail;return `${fmtTime(e.t)} ${evLabel(e)}${det&&e.type!=='memo'?` — ${det}`:''}`});
+  const lines=d.evs.map(e=>{const I=A.info[e.id]||{},det=I.detail;return `${fmtTime(e.t)} ${evLabel(e)}${det&&e.type!=='memo'?` — ${det}`:''}${I.gap&&I.gap.kind==='pee'?` (${I.gap.sleep?'잠/어린이집 포함 간격':'쉬텀'} ${fmtDur(I.gap.ms)})`:''}`});
   const hist=[];for(let i=1;i<=7;i++){const f=sod(addDays(from,-i)),x=dayStats(A,f);if(!x.n)continue;
     hist.push(`${fmtDay(f)}: 쉬 ${x.pee}회(성공 ${x.ok}·아깝다 ${x.close}·실수 ${x.oops}, 성공률 ${x.rate??'-'}%), 평균 쉬텀 ${x.avg?fmtDur(x.avg):'-'}, 응가 ${x.poo}회(변기 ${x.pooPotty}, 팬티 실수 ${x.pooOops}), 팬티 착용 ${x.pantsMs?fmtDur(x.pantsMs):'0'}, 최장 뽀송 ${x.dryMax?fmtDur(x.dryMax):'-'}`)}
   return `당신은 따뜻하고 경험 많은 유아 배변훈련 코치입니다. 아이를 재촉하거나 벌주지 않고, 아이 속도를 존중하는 방식(칭찬·일관성·정해진 시간에 변기 기회 주기)을 따릅니다.
@@ -846,7 +851,7 @@ function renderReport(){
   <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('wake')}어제 리포트</span> <span>${fmtDay(from)} 기록</span></h2>${advBox}</section>
   <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('dry')}어제 숫자</span> <span>▲▼ 그전 3일 평균과 비교</span></h2>
     <div class="kvs">${cmpPill('쉬',d.pee,pa('pee'),n,null)}${cmpPill('성공률',d.rate,pa('rate'),pct,true)}${cmpPill('평균 쉬텀',d.avg,pa('avg'),fmtDur,true)}
-      ${cmpPill('💫 아깝다',d.close,pa('close'),n,null)}${cmpPill('💦 실수',d.oops,pa('oops'),n,false)}${cmpPill('팬티 착용',d.pantsMs||null,pa('pantsMs'),fmtDur,true)}</div>
+      ${cmpPill('아깝다',d.close,pa('close'),n,null)}${cmpPill('실수',d.oops,pa('oops'),n,false)}${cmpPill('팬티 착용',d.pantsMs||null,pa('pantsMs'),fmtDur,true)}</div>
   </section>
   ${weeklySection(A)}
   ${pastHtml}
@@ -944,13 +949,13 @@ function renderRecords(){
   let body='';
   if(S.view==='day'){
     const from=sod(S.cursor),isToday=dayKey(from)===dayKey(Date.now()),evs=evsIn(A,from,from+DAY);
-    const center=`<div class="l">${isToday?'오늘':fmtDay(from,false)}</div><div class="v num">💧 ${peeCnt(evs)} · 💩 ${cnt(evs,'poo')}</div><div class="s">${oopsText(evs)}</div>`;
+    const oc=outcomes(evs);const center=oc.total?`<div class="v num">💧 ${oc.total}</div><div class="s">성공률 ${oc.rate}%</div>`:'<div class="s">쉬 기록 없음</div>';
     body=`<div class="navbar"><button class="navbtn" data-move="-1" aria-label="이전 날">‹</button><div class="ttl">${fmtDay(from)}</div><button class="navbtn" data-move="1" aria-label="다음 날">›</button></div>
     ${isToday?'':'<div style="text-align:center"><button class="todaybtn" data-goto="today">오늘로</button></div>'}
-    <section class="card">${ringCard(from,A,isToday,center)}</section>
     ${(()=>{const d=dupList(evs);return d.length?`<section class="card dupcard"><b>⚠️ 1분 안에 같은 기록이 ${d.length}개 더 있어요</b><small>두 번 눌린 것 같으면 정리해 주세요. 첫 번째 기록만 남겨요.</small><div class="duprows">${d.map(e=>`<span class="pill oops">${fmtTime(e.t)} ${esc(e.type==='poo'&&e.place==='pants'?'응가 실수':TYPES[e.type].label)}</span>`).join('')}</div><button class="askbtn" id="dupClean" data-day="${from}" style="margin-top:4px">중복 ${d.length}개 정리하기</button></section>`:''})()}
-    <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('pee')}하루 요약</span></h2>${daySummary(evs)}</section>
-    <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('dry')}기록</span> <span>최근 기록이 위</span></h2>${timeline(evs,A,isToday)}</section>`;
+    <section class="card">${daySummary(evs)}</section>
+    <section class="card ringcard">${ringCard(from,A,isToday,center)}</section>
+    <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('dry')}기록</span> <span>눌러서 수정</span></h2>${timeline(evs,A,isToday)}</section>`;
   } else if(S.view==='week'){
     const d0=new Date(S.cursor),mon=sod(addDays(S.cursor,-((d0.getDay()+6)%7))),sun=addDays(mon,6),todayK=dayKey(Date.now());
     const rows=[];let allInts=[],poos=0,accs=0;
@@ -958,13 +963,13 @@ function renderRecords(){
       const dt=new Date(from);let strip='';for(const se of [...A.sleeps,...A.aways,...A.outings]){const st=Math.max(se.start,from),en=Math.min(se.end??Date.now(),from+DAY);if(en>st)strip+=`<span class="nt" style="left:${(st-from)/DAY*100}%;width:${(en-st)/DAY*100}%"></span>`}
       for(const g of wearSegments(A,from,from+DAY))strip+=`<span class="${g.kind==='pants'?'pb':'db'}" style="left:${(g.st-from)/DAY*100}%;width:${Math.max(.8,(g.en-g.st)/DAY*100)}%"></span>`;
       for(const d of peeDots(evs))strip+=`<span class="pd ${d.cls}" style="left:${minOfDay(d.t)/14.4}%"></span>`;
-      const oc=outcomes(evs);const sum=evs.length?`💧 <b>${oc.total}</b>${oc.total?` · 🎯 <b>${oc.rate}%</b>`:''}${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>`:'기록 없음';
+      const oc=outcomes(evs);const sum=evs.length?`💧 <b>${oc.total}</b>${oc.total?` · 성공률 <b>${oc.rate}%</b>`:''}${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>`:'기록 없음';
       rows.push(`<button class="wrow${dayKey(from)===todayK?' is-today':''}" data-day="${from}"><span class="dl"><b>${DOW[dt.getDay()]}</b>${dt.getMonth()+1}/${dt.getDate()}</span><span class="strip">${strip}</span><span class="wsum">${sum}</span></button>`)}
     body=`<div class="navbar"><button class="navbtn" data-move="-7" aria-label="이전 주">‹</button><div class="ttl">${fmtDay(mon,false)} – ${fmtDay(sun,false)}</div><button class="navbtn" data-move="7" aria-label="다음 주">›</button></div>
     <section class="card"><h2>이번 주 <span>최근 날짜가 위 · 눌러서 하루 보기</span></h2>
       <div class="axis"><span></span><div class="hrs"><span style="left:0">0시</span><span style="left:25%">6</span><span style="left:50%">12</span><span style="left:75%">18</span><span style="left:100%">24</span></div></div>
       ${rows.join('')}
-      <div class="legend"><span><i style="background:var(--pee-dot)"></i>🎯 성공</span><span><i style="background:var(--close-dot)"></i>💫 아깝다</span><span><i style="background:var(--oops-dot)"></i>💦 실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div></section>`;
+      <div class="legend"><span><i style="background:var(--pee-dot)"></i>성공</span><span><i style="background:var(--close-dot)"></i>아깝다</span><span><i style="background:var(--oops-dot)"></i>실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div></section>`;
   } else {
     const c=new Date(S.cursor),y=c.getFullYear(),m=c.getMonth(),first=new Date(y,m,1),lead=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),todayK=dayKey(Date.now());
     let cells=['월','화','수','목','금','토','일'].map(w=>`<div class="wd${w==='일'?' sun':w==='토'?' sat':''}">${w}</div>`).join('');
@@ -998,8 +1003,8 @@ function weeklySection(A){
   <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('dry')}이번 주 한눈에</span> <span>최근 7일</span></h2>
     <div class="tiles">
       ${tile('a','pantsOn','팬티 착용',`${cnt(wk,'pantsOn')}회`,avgWear!=null?`평균 ${fmtDur(avgWear)}`:'')}
-      ${(()=>{const oc=outcomes(wk);return tile('c','pee','쉬 성공률',oc.total?`${oc.rate}%`:'–',`🎯${oc.ok} 💫${oc.close} 💦${oc.oops}`)})()}
-      ${tile('p','poo','응가',`${poos.length}회`,`🎯 변기 ${potty} · 💦 ${poos.filter(e=>e.place==='pants').length}`)}
+      ${(()=>{const oc=outcomes(wk);return tile('c','pee','쉬 성공률',oc.total?`${oc.rate}%`:'–',`${cdot('ok')}${oc.ok} ${cdot('close')}${oc.close} ${cdot('oops')}${oc.oops}`)})()}
+      ${tile('p','poo','응가',`${poos.length}회`,`변기 ${potty} · 팬티 ${poos.filter(e=>e.place==='pants').length}`)}
       ${tile('d','dry','최장 뽀송',dries.length?fmtDur(Math.max(...dries)):'–',`확인 ${dries.length}회`)}
       ${tile('s','sleep','하루 평균 잠',slAvg!=null?fmtDur(slAvg):'–','')}
       ${tile('b','diaper','기록한 날',`${new Set(wk.map(e=>dayKey(e.t))).size}일`,'')}
@@ -1083,7 +1088,7 @@ function guardRecord(k,el,extra){
   $('#toastHost').innerHTML=`<div class="toast" role="status"><div class="r"><span>${TYPES[k].icon} ${fmtTime(recent.t)}에 방금 기록했어요. 한 번 더 기록할까요?</span><button id="dupAgain">또 기록</button></div></div>`;
   toastTimer=setTimeout(()=>{$('#toastHost').innerHTML='';window.__dupPending=null},5000);
 }
-function dupList(evs){const out=[],asc=[...evs].sort((a,b)=>a.t-b.t);for(let i=1;i<asc.length;i++){const e=asc[i];if(e.type==='memo')continue;const prev=asc.slice(0,i).reverse().find(x=>x.type===e.type&&(e.type!=='poo'||(x.place==='pants')===(e.place==='pants')));if(prev&&e.t-prev.t<DUP_MS&&!out.includes(prev))out.push(e)}return out}
+function dupList(evs){const out=[],asc=[...evs].sort((a,b)=>a.t-b.t);for(let i=1;i<asc.length;i++){const e=asc[i];if(!(e.type==='poo'||e.type==='dry'))continue;const prev=asc.slice(0,i).reverse().find(x=>x.type===e.type&&(e.type!=='poo'||(x.place==='pants')===(e.place==='pants')));if(prev&&e.t-prev.t<DUP_MS&&!out.includes(prev))out.push(e)}return out}
 async function cleanDups(from){const d=dupList(evsIn(analyze(),from,from+DAY));for(const e of d)await removeEvent(e.id);toast(`중복 기록 ${d.length}개를 정리했어요`)}
 function doRecord(k,el,extra){
   if(el)burst(el,TYPES[k].icon);
@@ -1186,13 +1191,13 @@ function exportPdf(o){
       <div><span>하루 평균 쉬</span><b>${rec.length?(Math.round(avgPee*10)/10)+'회':'-'}</b></div>
       <div><span>평균 쉬텀</span><b>${ai?fmtDur(ai):'-'}</b></div>
       <div><span>기상 후 첫 쉬</span><b>${wf?fmtDur(wf):'-'}</b></div>
-      <div><span>쉬 성공률</span><b>${oc.total?oc.rate+'%':'-'}</b><small style="display:block;font-size:8pt;color:#5a6474">🎯${oc.ok} 💫${oc.close} 💦${oc.oops}</small></div>
+      <div><span>쉬 성공률</span><b>${oc.total?oc.rate+'%':'-'}</b><small style="display:block;font-size:8pt;color:#5a6474">성공 ${oc.ok} · 아깝다 ${oc.close} · 실수 ${oc.oops}</small></div>
       <div><span>응가 (기간)</span><b>${D.poos.length}회</b></div>
       <div><span>지금 입는 것</span><b>${D.wearingNow?'팬티':'기저귀'}</b></div>
     </section>
     <section class="pr-s"><h2>집에서 본 패턴</h2><ul>${lines.map(l=>`<li>${l}</li>`).join('')}</ul></section>
     ${o.note.trim()?`<section class="pr-s pr-note"><h2>선생님께 부탁드려요</h2><p>${esc(o.note).replace(/\n/g,'<br>')}</p></section>`:''}
-    <section class="pr-s"><h2>날짜별 기록</h2><table><thead><tr><th>날짜</th><th>쉬</th><th>🎯 성공</th><th>💫 아깝다</th><th>💦 실수</th><th>평균 쉬텀</th><th>응가</th><th>팬티 착용</th><th>어린이집</th></tr></thead><tbody>${tbl}</tbody></table></section>
+    <section class="pr-s"><h2>날짜별 기록</h2><table><thead><tr><th>날짜</th><th>쉬</th><th>성공</th><th>아깝다</th><th>실수</th><th>평균 쉬텀</th><th>응가</th><th>팬티 착용</th><th>어린이집</th></tr></thead><tbody>${tbl}</tbody></table></section>
     ${memos.length?`<section class="pr-s"><h2>메모</h2><ul class="pr-m">${memos.slice(-20).map(e=>`<li><b>${new Date(e.t).getMonth()+1}/${new Date(e.t).getDate()} ${fmtTime(e.t)}</b> ${esc(e.text||'')}</li>`).join('')}</ul></section>`:''}
     <footer class="pr-f">부모가 앱으로 직접 기록한 자료예요. 빠진 기록이 있을 수 있고, 의료 진단이 아닌 참고 자료예요.</footer>
   </div>`;
