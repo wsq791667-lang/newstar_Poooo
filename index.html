@@ -572,6 +572,8 @@ const sleptBetween=(a,b)=>onlySleptBetween(a,b)||awayBetween(a,b);
 function peeIntervals(evs){const p=peeEpisodes(evs),o=[];for(let i=1;i<p.length;i++)if(dayKey(p[i].start)===dayKey(p[i-1].end)&&!sleptBetween(p[i-1].end,p[i].start))o.push(p[i].start-p[i-1].end);return o}
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 const cnt=(evs,ty)=>evs.filter(e=>e.type===ty).length;
+const pooOopsCnt=evs=>evs.filter(e=>e.type==='poo'&&e.place==='pants').length;
+const oopsText=evs=>{const a=cnt(evs,'accident'),b=pooOopsCnt(evs);return [a?`쉬 실수 ${a}`:'',b?`응가 실수 ${b}`:''].filter(Boolean).join(' · ')};
 const accCnt=evs=>evs.filter(e=>e.type==='accident'||(e.type==='poo'&&e.place==='pants')).length;
 
 /* ---------- storage ---------- */
@@ -588,7 +590,7 @@ async function addEvent(ev){
 }
 async function updateEvent(id,patch){
   const i=S.events.findIndex(x=>x.id===id);if(i<0)return;
-  const n={...S.events[i],...patch};if(n.type!=='memo')delete n.text;if(n.type!=='poo'||!n.place)delete n.place;S.events[i]=n;render();
+  const n={...S.events[i],...patch};if(n.type!=='memo')delete n.text;if(!(n.type==='poo'||n.type==='out')||!n.place)delete n.place;S.events[i]=n;render();
   if(S.db){try{await S.db.collection('events').doc(id).set(body(n))}catch(err){failToast()}}else saveLocal();
 }
 async function removeEvent(id){
@@ -678,7 +680,7 @@ function daySummary(evs){
   if(ints.length)p.push(`<span class="pill pee">평균 쉬텀 <b>${fmtDur(avg(ints))}</b></span>`,`<span class="pill pee">최단 <b>${fmtDur(Math.min(...ints))}</b></span>`,`<span class="pill pee">최장 <b>${fmtDur(Math.max(...ints))}</b></span>`);
   p.push(`<span class="pill poo">${mi('poo')}응가 <b>${cnt(evs,'poo')}회</b></span>`);
   const dr=cnt(evs,'dry');if(dr)p.push(`<span class="pill dry">${mi('dry')}뽀송 <b>${dr}회</b></span>`);
-  const po=cnt(evs,'pantsOn'),ac=accCnt(evs);if(po)p.push(`<span class="pill pants">${mi('pantsOn')}팬티 <b>${po}회</b></span>`);if(ac)p.push(`<span class="pill oops">${mi('accident')}실수 <b>${ac}회</b></span>`);
+  const po=cnt(evs,'pantsOn'),ac=accCnt(evs);if(po)p.push(`<span class="pill pants">${mi('pantsOn')}팬티 <b>${po}회</b></span>`);const pa=cnt(evs,'accident'),pb=pooOopsCnt(evs);if(pa)p.push(`<span class="pill oops">${mi('accident')}쉬 실수 <b>${pa}회</b></span>`);if(pb)p.push(`<span class="pill oops">${mi('pooOops')}응가 실수 <b>${pb}회</b></span>`);
   return `<div class="pills">${p.join('')}</div>`;
 }
 
@@ -833,7 +835,7 @@ function renderToday(){
   const stSleep=A.sleeping?`<span class="st sleep">😴 자는 중 · ${fmtDur(now-A.sleepStart)}째</span>`:'';
   const stPoo=`<span class="st poo">💩 ${A.lastPoo?`마지막 응가 ${whenLabel(A.lastPoo.t)}`:'응가 기록 없음'}</span>`;
   const mini=(l,v)=>`<div class="mini"><div class="l">${l}</div><div class="v num">${v}</div></div>`;
-  const ringCenter=`<div class="l">오늘</div><div class="v num">💧 ${peeCnt(todays)} · 💩 ${cnt(todays,'poo')}</div><div class="s">${accCnt(todays)?`실수 ${accCnt(todays)}회`:'하루 24시간'}</div>`;
+  const ringCenter=`<div class="l">오늘</div><div class="v num">💧 ${peeCnt(todays)} · 💩 ${cnt(todays,'poo')}</div><div class="s">${oopsText(todays)||'하루 24시간'}</div>`;
   return header()+`
   <section class="hero" aria-label="현재 상태">
     <div><div class="lbl">💧 마지막 쉬</div>
@@ -867,7 +869,7 @@ function renderRecords(){
   let body='';
   if(S.view==='day'){
     const from=sod(S.cursor),isToday=dayKey(from)===dayKey(Date.now()),evs=evsIn(A,from,from+DAY);
-    const center=`<div class="l">${isToday?'오늘':fmtDay(from,false)}</div><div class="v num">💧 ${peeCnt(evs)} · 💩 ${cnt(evs,'poo')}</div><div class="s">${accCnt(evs)?`실수 ${accCnt(evs)}회`:''}</div>`;
+    const center=`<div class="l">${isToday?'오늘':fmtDay(from,false)}</div><div class="v num">💧 ${peeCnt(evs)} · 💩 ${cnt(evs,'poo')}</div><div class="s">${oopsText(evs)}</div>`;
     body=`<div class="navbar"><button class="navbtn" data-move="-1" aria-label="이전 날">‹</button><div class="ttl">${fmtDay(from)}</div><button class="navbtn" data-move="1" aria-label="다음 날">›</button></div>
     ${isToday?'':'<div style="text-align:center"><button class="todaybtn" data-goto="today">오늘로</button></div>'}
     <section class="card">${ringCard(from,A,isToday,center)}</section>
@@ -880,7 +882,7 @@ function renderRecords(){
       const dt=new Date(from);let strip='';for(const se of [...A.sleeps,...A.aways,...A.outings]){const st=Math.max(se.start,from),en=Math.min(se.end??Date.now(),from+DAY);if(en>st)strip+=`<span class="nt" style="left:${(st-from)/DAY*100}%;width:${(en-st)/DAY*100}%"></span>`}
       for(const g of wearSegments(A,from,from+DAY))strip+=`<span class="${g.kind==='pants'?'pb':'db'}" style="left:${(g.st-from)/DAY*100}%;width:${Math.max(.8,(g.en-g.st)/DAY*100)}%"></span>`;
       for(const e of evs){if(!(isPee(e)||e.type==='poo'))continue;strip+=`<span class="pd ${e.type}" style="left:${minOfDay(e.t)/14.4}%"></span>`}
-      const sum=evs.length?`💧 <b>${peeCnt(evs)}</b>${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>${accCnt(evs)?` · 💦 <b>${accCnt(evs)}</b>`:''}`:'기록 없음';
+      const sum=evs.length?`💧 <b>${peeCnt(evs)}</b>${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>${cnt(evs,'accident')?` · 쉬 실수 <b>${cnt(evs,'accident')}</b>`:''}${pooOopsCnt(evs)?` · 응가 실수 <b>${pooOopsCnt(evs)}</b>`:''}`:'기록 없음';
       rows.push(`<button class="wrow${dayKey(from)===todayK?' is-today':''}" data-day="${from}"><span class="dl"><b>${DOW[dt.getDay()]}</b>${dt.getMonth()+1}/${dt.getDate()}</span><span class="strip">${strip}</span><span class="wsum">${sum}</span></button>`)}
     body=`<div class="navbar"><button class="navbtn" data-move="-7" aria-label="이전 주">‹</button><div class="ttl">${fmtDay(mon,false)} – ${fmtDay(sun,false)}</div><button class="navbtn" data-move="7" aria-label="다음 주">›</button></div>
     <section class="card"><h2>이번 주 <span>최근 날짜가 위 · 눌러서 하루 보기</span></h2>
@@ -893,7 +895,7 @@ function renderRecords(){
     for(let i=0;i<lead;i++)cells+='<div class="mc blank"></div>';
     let mInts=[],mPoo=0,mAcc=0,mDays=0;
     for(let d=1;d<=days;d++){const from=new Date(y,m,d).getTime(),evs=evsIn(A,from,from+DAY),ints=peeIntervals(evs);mInts.push(...ints);mPoo+=cnt(evs,'poo');mAcc+=accCnt(evs);if(evs.length)mDays++;
-      const pe=peeCnt(evs),po=cnt(evs,'poo'),ac=accCnt(evs);
+      const pe=peeCnt(evs),po=cnt(evs,'poo'),ac=cnt(evs,'accident');
       cells+=`<button class="mc${dayKey(from)===todayK?' is-today':''}${evs.length?' has':''}" data-day="${from}" aria-label="${m+1}월 ${d}일"><span class="n">${d}</span>${pe?`<span class="c">${mi('pee')}${pe}</span>`:''}${po?`<span class="c">${mi('poo')}${po}</span>`:''}${ac?`<span class="c">${mi('accident')}${ac}</span>`:''}</button>`}
     body=`<div class="navbar"><button class="navbtn" data-month="-1" aria-label="이전 달">‹</button><div class="ttl">${y}년 ${m+1}월</div><button class="navbtn" data-month="1" aria-label="다음 달">›</button></div>
     <section class="card"><div class="mgrid">${cells}</div></section>
@@ -957,6 +959,7 @@ function openSheet(id){
     $('#sheetHost').innerHTML=`<div class="veil" id="veil"><div class="sheet" role="dialog" aria-modal="true" aria-label="${id?'기록 수정':'기록 추가'}">
       <h3>${id?'기록 수정':'놓친 기록 추가'}</h3>
       <div class="opts">${Object.entries(TYPES).map(([k,T])=>`<button data-type="${k}" aria-pressed="${k===e.type}">${T.icon} ${k==='memo'?'메모':T.label}</button>`).join('')}</div>
+      ${e.type==='out'?`<div class="flabel">어디 갔어요?</div><div class="opts">${[['daycare','🎒 어린이집'],['outing','🚗 외출']].map(([k,v])=>`<button data-pl="${k}" aria-pressed="${(e.place==='outing'?'outing':'daycare')===k}">${v}</button>`).join('')}</div><div class="note2" style="margin-top:-6px">어린이집 시간은 쉬텀에서 빼고, 외출은 그대로 계산해요.</div>`:''}
       ${e.type==='poo'?`<div class="flabel">어디에 했어요? (선택)</div><div class="opts">${[['','선택 안 함'],...Object.entries(PLACES).map(([k,v])=>[k,v.slice(0,-1)])].map(([k,v])=>`<button data-pl="${k}" aria-pressed="${(e.place||'')===k}">${v}</button>`).join('')}</div>`:''}
       <div class="fields"><label>날짜<input type="date" id="fDate" value="${dayKey(d)}"></label><label>시간<input type="time" id="fTime" value="${fmtTime(d)}"></label></div>
       ${e.type==='memo'?`<label class="memo-field">메모 내용<input id="fText" maxlength="40" value="${esc(e.text||'')}"></label>`:''}
@@ -972,6 +975,7 @@ function openSheet(id){
       const p={type:e.type,t:new Date(`${dv}T${tv}`).getTime()};
       if(e.type==='memo'){const tx=($('#fText')?.value||'').trim();if(!tx){$('#fText').focus();return}p.text=tx}
       if(e.type==='poo'&&e.place)p.place=e.place;
+      if(e.type==='out')p.place=e.place==='outing'?'outing':'daycare';
       if(id)updateEvent(id,p);else addEvent(p);
       close();toast(id?'수정했어요':'추가했어요');
     };
