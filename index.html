@@ -26,7 +26,7 @@
   --oops:#FFE8D3; --oops-ink:#AD5E22; --oops-dot:#F29A55;
   --diaper:#DFF3E8; --diaper-ink:#3A8460; --diaper-dot:#62B98D;
   --memo:#EEE8FA; --memo-ink:#65509B;
-  --sleep:#E8E3FA; --sleep-ink:#5A4C9E; --sleep-band:#B7ACEA; --away-band:#F6C99B; --rest:#DCD8EA; --away:#FFF0E0; --away-ink:#A2602A; --dry:#FFF3CC; --dry-ink:#93700F; --dry-dot:#F2C94C;
+  --sleep:#E8E3FA; --sleep-ink:#5A4C9E; --sleep-band:#B7ACEA; --away-band:#F6C99B; --close-dot:#F2C94C; --rest:#DCD8EA; --away:#FFF0E0; --away-ink:#A2602A; --dry:#FFF3CC; --dry-ink:#93700F; --dry-dot:#F2C94C;
   --night:#ECE8F8; --dots:#E2E8F4; --danger:#C2453D; --sticker:#FFFFFF; --sky1:#CDE5FF; --sky2:#FFE1EE; --cloud:#FFFFFF; --star:#FFD66B; --sel:#2A3142;
   --shadow:0 1px 2px rgba(42,49,66,.04),0 6px 18px rgba(42,49,66,.06);
   --f-display:"Jua","Nanum Gothic",system-ui,sans-serif;
@@ -36,13 +36,13 @@
   --bg:#14171D; --surface:#1D2129; --ink:#E8ECF3; --muted:#99A3B5; --line:#2B313C; --soft:#242934;
   --pee:#1D3046; --pee-ink:#90C3F0; --pee-dot:#6CB0F0; --poo:#33291F; --poo-ink:#E0B58C; --poo-dot:#C99363;
   --pants:#38222E; --pants-ink:#F0A4C2; --pants-band:#9C4D70; --diaper-band:#3F7A5C; --oops:#3A2919; --oops-ink:#F2AF79; --oops-dot:#F29A55;
-  --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF; --sleep:#28243F; --sleep-ink:#BDB2F2; --sleep-band:#5E539A; --away-band:#8A5A33; --rest:#34324A; --away:#3A2C1E; --away-ink:#F2BE8C; --dry:#3A321A; --dry-ink:#F0CF6E; --dry-dot:#E2B93E;
+  --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF; --sleep:#28243F; --sleep-ink:#BDB2F2; --sleep-band:#5E539A; --away-band:#8A5A33; --close-dot:#E2B93E; --rest:#34324A; --away:#3A2C1E; --away-ink:#F2BE8C; --dry:#3A321A; --dry-ink:#F0CF6E; --dry-dot:#E2B93E;
   --night:#232237; --dots:#20242C; --danger:#F08A82; --sticker:#2E3440; --sky1:#22314A; --sky2:#3A2840; --cloud:#3A4458; --star:#E8C36A; --sel:#E8ECF3; --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#14171D; --surface:#1D2129; --ink:#E8ECF3; --muted:#99A3B5; --line:#2B313C; --soft:#242934;
   --pee:#1D3046; --pee-ink:#90C3F0; --pee-dot:#6CB0F0; --poo:#33291F; --poo-ink:#E0B58C; --poo-dot:#C99363;
   --pants:#38222E; --pants-ink:#F0A4C2; --pants-band:#9C4D70; --diaper-band:#3F7A5C; --oops:#3A2919; --oops-ink:#F2AF79; --oops-dot:#F29A55;
-  --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF; --sleep:#28243F; --sleep-ink:#BDB2F2; --sleep-band:#5E539A; --away-band:#8A5A33; --rest:#34324A; --away:#3A2C1E; --away-ink:#F2BE8C; --dry:#3A321A; --dry-ink:#F0CF6E; --dry-dot:#E2B93E;
+  --diaper:#1C3228; --diaper-ink:#8ED2AD; --diaper-dot:#62B98D; --memo:#29233F; --memo-ink:#BBA9EF; --sleep:#28243F; --sleep-ink:#BDB2F2; --sleep-band:#5E539A; --away-band:#8A5A33; --close-dot:#E2B93E; --rest:#34324A; --away:#3A2C1E; --away-ink:#F2BE8C; --dry:#3A321A; --dry-ink:#F0CF6E; --dry-dot:#E2B93E;
   --night:#232237; --dots:#20242C; --danger:#F08A82; --sticker:#2E3440; --sky1:#22314A; --sky2:#3A2840; --cloud:#3A4458; --star:#E8C36A; --sel:#E8ECF3; --shadow:none; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -434,6 +434,30 @@ details[open]>summary .more{font-size:0;padding:3px 10px}details[open]>summary .
 .plancard .planlist{margin-top:12px}
 .advpeek{margin:0;font-size:14px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .chips2{display:flex;flex-wrap:wrap;gap:6px}.chips2 .pt{background:var(--pee);font-size:13px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dupcard{display:flex;flex-direction:column;gap:6px;background:linear-gradient(160deg,var(--surface) 50%,var(--oops))}
+.dupcard b{font-family:var(--f-display);font-weight:400;font-size:17px;color:var(--oops-ink)}.dupcard small{font-size:13px;color:var(--muted)}
+.duprows{display:flex;flex-wrap:wrap;gap:6px}
+.ob{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.ob-h{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}.ob-h b{font-family:var(--f-display);font-weight:400;font-size:18px}.ob-h span{color:var(--muted)}.ob-h span b{color:var(--pee-ink);font-size:18px}
+.ob-bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--soft);border:2px solid var(--sticker);gap:2px}
+.ob-bar i{display:block;min-width:6px}.ob-bar i.ok{background:var(--pee-dot)}.ob-bar i.close{background:var(--close-dot)}.ob-bar i.oops{background:var(--oops-dot)}
+.ob-l{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--muted)}.ob-l b{color:var(--ink);font-family:var(--f-display);font-weight:400;font-size:15px}.ob-l .zero{opacity:.45}
+.ob.cmp{margin:0;background:var(--surface);border-radius:16px;padding:8px 10px}.ob.cmp .ob-bar{height:10px}.ob.cmp .ob-l{font-size:12px}.ob .rt{margin-left:auto}.ob .rt b{color:var(--pee-ink)}
+.sline{font-size:14px;margin-bottom:10px}.sline b{font-family:var(--f-display);font-weight:400;font-size:17px;color:var(--pee-ink)}.sline small{color:var(--muted)}
+.dot.ok,.pd.ok{fill:var(--pee-dot);background:var(--pee-dot)}.dot.close,.pd.close{fill:var(--close-dot);background:var(--close-dot)}.dot.oops,.pd.oops{fill:var(--oops-dot);background:var(--oops-dot)}
+.dot.poooops{stroke:var(--oops-dot);stroke-width:3}.pd.poooops{border-color:var(--oops-dot)}
+.nudge{display:flex;align-items:center;gap:12px;text-align:left;width:100%;background:linear-gradient(160deg,var(--surface) 50%,var(--pee));cursor:pointer}
+.nudge .mascot{width:40px;height:46px;flex:none}
+.nudge b{display:block;font-family:var(--f-display);font-weight:400;font-size:18px;color:var(--pee-ink)}
+.nudge small{font-size:13px;color:var(--muted)}
+.pastlist{display:flex;flex-direction:column;gap:8px}
+.pastrep{border:2px solid var(--line);border-radius:18px;padding:10px 12px;background:var(--soft)}
+.pastrep>summary{display:grid;grid-template-columns:1fr auto;grid-template-areas:"d m" "p p";gap:4px 8px;align-items:center}
+.pastrep .pd-d{grid-area:d;font-family:var(--f-display);font-size:16px}
+.pastrep .more{grid-area:m}
+.pastrep .pd-p{grid-area:p;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pastrep[open] .pd-p{display:none}
+.pastrep[open]>.adv{margin-top:10px}
 .advfull>summary{text-align:center;padding:4px 0}
 .advfull[open]{display:flex;flex-direction:column;gap:12px}
 .pt{font-family:var(--f-display);font-size:14px;background:var(--surface);color:var(--pee-ink);border-radius:12px;padding:2px 10px;max-width:100%;overflow-wrap:anywhere}
@@ -444,6 +468,32 @@ details[open]>summary .more{font-size:0;padding:3px 10px}details[open]>summary .
 .advmeta{font-size:11px;color:var(--muted);text-align:right}
 .monthsrow{display:flex;align-items:center;gap:8px;font-size:15px}
 .monthsrow input{width:90px;font:inherit;font-size:17px;padding:8px 10px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px}.chk input{width:18px;height:18px}
+.exbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.exb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:3px solid var(--sticker);border-radius:18px;padding:12px;background:var(--pee);color:var(--pee-ink);box-shadow:2px 3px 0 rgba(47,108,166,.2)}
+.exb+.exb{background:var(--diaper);color:var(--diaper-ink)}
+.exb b{font-family:var(--f-display);font-weight:400;font-size:18px}.exb small{font-size:11px;font-weight:700;opacity:.8}
+.exb[disabled]{opacity:.5}
+.sheet textarea{font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);width:100%;resize:vertical}
+#printArea{display:none}
+@media print{
+  @page{size:A4;margin:12mm}
+  html,body{background:#fff!important;padding:0!important}
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block!important;color:#222;font-family:var(--f-body);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr{font-size:11pt;line-height:1.5}
+  .pr-h{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #5AA2E6;padding-bottom:8px;margin-bottom:12px}
+  .pr-k{font-size:9pt;color:#5a6474}.pr-h h1{margin:0;font-family:var(--f-display);font-weight:400;font-size:24pt;color:#2F6CA6}.pr-h h1 small{font-size:12pt;color:#5a6474}
+  .pr-d{text-align:right;font-size:10pt}.pr-d small{color:#5a6474}
+  .pr-kv{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+  .pr-kv div{background:#EEF5FD;border-radius:8px;padding:6px 10px}.pr-kv span{display:block;font-size:8.5pt;color:#5a6474}.pr-kv b{font-family:var(--f-display);font-weight:400;font-size:15pt;color:#2F6CA6}
+  .pr-s{margin-bottom:12px;break-inside:avoid}.pr-s h2{font-family:var(--f-display);font-weight:400;font-size:13pt;margin:0 0 4px;color:#2A3142}
+  .pr-s ul{margin:0;padding-left:18px}.pr-s li{margin-bottom:3px}
+  .pr-note p{margin:0;background:#FFF3CC;border-radius:8px;padding:8px 12px}
+  .pr table{width:100%;border-collapse:collapse;font-size:9.5pt}.pr th,.pr td{border-bottom:1px solid #dde3ec;padding:4px 6px;text-align:center}.pr th{background:#F2F5FA;font-weight:700}.pr tr.empty td{color:#aab}
+  .pr-m{font-size:9.5pt}
+  .pr-f{margin-top:10px;font-size:8.5pt;color:#7b859a;border-top:1px solid #dde3ec;padding-top:6px}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -529,7 +579,7 @@ function analyze(){
   AWAYS=aways;let lastBack=null;
   for(const e of asc){
     const I=info[e.id]={detail:'',gap:null};
-    if(isPee(e)&&lastPee&&e.t-lastPee.t<MERGE){I.cont=true;I.detail=`${fmtTime(lastPee.t)} ${lastPee.type==='accident'?'실수':'쉬'}에 이어서 · 한 번으로 계산`;lastPee=e}
+    if(isPee(e)&&lastPee&&e.t-lastPee.t<MERGE){I.cont=true;if(lastPee.type==='accident'&&e.type==='pee'&&info[lastPee.id])info[lastPee.id].rescued=true;I.detail=`${fmtTime(lastPee.t)} ${lastPee.type==='accident'?'실수':'쉬'}에 이어서 · 한 번으로 계산`;lastPee=e}
     else if(isPee(e)){let base;const slp=lastPee&&onlySleptBetween(lastPee.t,e.t),aw=lastPee&&awayBetween(lastPee.t,e.t),sl=slp||aw;
       if(lastPee&&dayKey(lastPee.t)===dayKey(e.t)){I.gap={kind:'pee',label:aw?'어린이집 포함':slp?'잠 포함':'쉬텀',ms:e.t-lastPee.t,sleep:sl};base=`이전 쉬 ${fmtTime(lastPee.t)}${lastPee.type==='accident'?'(실수)':''}`}else base='오늘 첫 쉬';
       if(lastWake&&(!lastPee||lastWake.t>lastPee.t))base=`일어나고 ${fmtDur(e.t-lastWake.t)} 후 첫 쉬`;
@@ -546,6 +596,8 @@ function analyze(){
     else if(e.type==='accident'){if(pStart!=null){I.pants=`팬티 착용 ${fmtDur(e.t-pStart)} 후`;I.detail=I.pants+' · '+I.detail}}
     else if(e.type==='diaper'){if(pStart!=null){I.detail=`팬티 착용시간 ${fmtDur(e.t-pStart)}`;sessions.push({start:pStart,end:e.t})}pStart=null}
   }
+  {let la=null;for(const e of asc){if(e.type!=='accident')continue;const I=info[e.id];if(la&&e.t-la.t<MERGE){I.again=true;I.detail=`${fmtTime(la.t)} 실수와 같은 실수 · 한 번으로 계산`;I.gap=null;if(I.rescued&&info[la.id])info[la.id].rescued=true}else la=e}}
+  for(const e of asc){const I=info[e.id];if(e.type==='accident'&&I&&I.rescued&&!I.again)I.detail='아깝다 💫 변기에서 마저 했어요 · '+I.detail}
   if(pStart!=null)sessions.push({start:pStart,end:null});
   return {asc,info,sessions,sleeps,lastPee,lastPoo,pStart,sleeping:sStart!=null,sleepStart:sStart,aways,outings,away:aStart!=null,awayStart:aStart,awayKind:aKind};
 }
@@ -562,7 +614,15 @@ function wearSegments(A,from,to){
 function evsIn(A,from,to){return A.asc.filter(e=>e.t>=from&&e.t<to)}
 const isPee=e=>e.type==='pee'||e.type==='accident';
 const MERGE=10*60000; /* 10분 안에 이어진 쉬(실수 후 변기 등)는 한 번으로 계산 */
-function peeEpisodes(evs){const p=evs.filter(isPee).sort((a,b)=>a.t-b.t),out=[];for(const e of p){const l=out[out.length-1];if(l&&e.t-l.end<MERGE)l.end=e.t;else out.push({start:e.t,end:e.t})}return out}
+function peeEpisodes(evs){const p=evs.filter(isPee).sort((a,b)=>a.t-b.t),out=[];for(const e of p){const l=out[out.length-1];if(l&&e.t-l.end<MERGE){l.end=e.t;l.evs.push(e)}else out.push({start:e.t,end:e.t,evs:[e]})}
+  for(const ep of out){const fa=ep.evs.findIndex(x=>x.type==='accident');ep.out=fa<0?'ok':ep.evs.slice(fa+1).some(x=>x.type==='pee')?'close':'oops'}return out}
+const OUT={ok:{ic:'🎯',l:'성공'},close:{ic:'💫',l:'아깝다'},oops:{ic:'💦',l:'실수'}};
+function outcomes(evs){const c={ok:0,close:0,oops:0,total:0};for(const ep of peeEpisodes(evs)){c[ep.out]++;c.total++}c.rate=c.total?Math.round(c.ok/c.total*100):null;return c}
+function pooOut(evs){const p=evs.filter(e=>e.type==='poo');return {total:p.length,potty:p.filter(e=>e.place==='potty').length,pants:p.filter(e=>e.place==='pants').length,diaper:p.filter(e=>e.place==='diaper').length,none:p.filter(e=>!e.place).length}}
+function outcomeBar(c,compact){if(!c.total)return '';const ks=['ok','close','oops'];
+  return `<div class="ob${compact?' cmp':''}">${compact?'':`<div class="ob-h"><b>💧 쉬 ${c.total}회</b><span>성공률 <b>${c.rate}%</b></span></div>`}
+  <div class="ob-bar">${ks.map(k=>c[k]?`<i class="${k}" style="flex:${c[k]}"></i>`:'').join('')}</div>
+  <div class="ob-l">${ks.map(k=>`<span class="${k}${c[k]?'':' zero'}">${OUT[k].ic} ${OUT[k].l} <b>${c[k]}</b></span>`).join('')}${compact?`<span class="rt">성공률 <b>${c.rate}%</b></span>`:''}</div></div>`}
 const peeCnt=evs=>peeEpisodes(evs).length;
 let SLEEPS=[];
 let AWAYS=[];
@@ -573,8 +633,10 @@ function peeIntervals(evs){const p=peeEpisodes(evs),o=[];for(let i=1;i<p.length;
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 const cnt=(evs,ty)=>evs.filter(e=>e.type===ty).length;
 const pooOopsCnt=evs=>evs.filter(e=>e.type==='poo'&&e.place==='pants').length;
-const oopsText=evs=>{const a=cnt(evs,'accident'),b=pooOopsCnt(evs);return [a?`쉬 실수 ${a}`:'',b?`응가 실수 ${b}`:''].filter(Boolean).join(' · ')};
-const accCnt=evs=>evs.filter(e=>e.type==='accident'||(e.type==='poo'&&e.place==='pants')).length;
+function accOnce(evs){const a=evs.filter(e=>e.type==='accident').sort((x,y)=>x.t-y.t),out=[];for(const e of a){if(out.length&&e.t-out[out.length-1].t<MERGE)continue;out.push(e)}return out}
+const peeOopsCnt=evs=>outcomes(evs).oops;
+const oopsText=evs=>{const c=outcomes(evs);return c.total?`🎯${c.ok} 💫${c.close} 💦${c.oops}`:''};
+const accCnt=evs=>peeOopsCnt(evs)+evs.filter(e=>e.type==='poo'&&e.place==='pants').length;
 
 /* ---------- storage ---------- */
 const LS='shishi-v1';
@@ -590,7 +652,7 @@ async function addEvent(ev){
 }
 async function updateEvent(id,patch){
   const i=S.events.findIndex(x=>x.id===id);if(i<0)return;
-  const n={...S.events[i],...patch};if(n.type!=='memo')delete n.text;if(!(n.type==='poo'||n.type==='out')||!n.place)delete n.place;S.events[i]=n;render();
+  const n={...S.events[i],...patch};if(n.type!=='memo')delete n.text;if(!(n.type==='poo'||n.type==='out')||!n.place)delete n.place;if(n.type!=='accident'||!n.amt)delete n.amt;S.events[i]=n;render();
   if(S.db){try{await S.db.collection('events').doc(id).set(body(n))}catch(err){failToast()}}else saveLocal();
 }
 async function removeEvent(id){
@@ -641,7 +703,7 @@ function header(){
 
 function rowHTML(e,A){
   const T=TYPES[e.type]||TYPES.memo,I=A.info[e.id]||{};
-  const name=e.type==='memo'?esc(e.text||''):e.type==='out'?(e.place==='outing'?'외출했어요':'등원했어요'):e.type==='back'?'돌아왔어요':e.type==='poo'&&e.place==='pants'?'응가 실수 (팬티)':e.type==='poo'&&e.place?`응가 · ${PLACES[e.place].slice(0,-1)}`:T.label;
+  const name=e.type==='memo'?esc(e.text||''):e.type==='accident'?'쉬 실수':e.type==='out'?(e.place==='outing'?'외출했어요':'등원했어요'):e.type==='back'?'돌아왔어요':e.type==='poo'&&e.place==='pants'?'응가 실수':e.type==='poo'&&e.place?`응가 · ${PLACES[e.place].slice(0,-1)}`:T.label;
   const detail=e.type==='memo'?'메모':(I.detail||'');
   const gap=I.gap?`<span class="gap ${I.gap.kind}${I.gap.sleep?' sl':''}"><small>${I.gap.label}</small><b>${fmtDur(I.gap.ms)}</b></span>`:'<span></span>';
   return `<button class="row" data-edit="${e.id}"><span class="tm">${fmtTime(e.t)}</span><span class="bub ${T.cls}" aria-hidden="true">${e.type==='out'&&e.place==='outing'?'🚗':(CH[e.type]||CH.memo)()}</span><span class="txt"><div class="nm">${name}</div>${detail?`<div class="dt">${detail}</div>`:''}</span>${gap}</button>`;
@@ -666,40 +728,41 @@ function ringSVG(from,A,isToday){
   for(const se of [...A.sleeps,...A.aways,...A.outings]){const st=Math.max(se.start,from),en=Math.min(se.end??nowT,to);if(en>st){const m1=(st-from)/60000,m2=Math.min(1440,Math.max(m1+3,(en-from)/60000));s+=`<path class="rrest" d="${wedge(m1,m2,132)}"/>`}}
   s+=`<circle class="rface" cx="150" cy="150" r="84"/>`;
   for(const g of wearSegments(A,from,to)){const m1=(g.st-from)/60000,m2=Math.min(1440,Math.max(m1+3,(g.en-from)/60000));s+=`<path class="${g.kind==='pants'?'rband':'rdiaper'}" d="${arc(m1,m2,101)}"/>`}
-  for(const e of evsIn(A,from,to)){if(!(isPee(e)||e.type==='poo'))continue;const onBand=false;const [x,y]=P(minOfDay(e.t),onBand?101:116);s+=`<circle class="dot ${e.type}${onBand?' onband':''}" cx="${f(x)}" cy="${f(y)}" r="${e.type==='pee'?8:7}"/>`}
+  for(const d of peeDots(evsIn(A,from,to))){const [x,y]=P(minOfDay(d.t),116);s+=`<circle class="dot ${d.cls}" cx="${f(x)}" cy="${f(y)}" r="${d.big?8:7}"/>`}
   if(isToday){const m=minOfDay(nowT),[x1,y1]=P(m,88),[x2,y2]=P(m,128);s+=`<line class="hand" x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}"/><circle class="handtip" cx="${f(x2)}" cy="${f(y2)}" r="3.5"/>`}
   return s+'</svg>';
 }
 function ringCard(from,A,isToday,center){
   return `<div class="ringbox">${ringSVG(from,A,isToday)}<div class="ring-center">${center}</div></div>
-  <div class="legend"><span><i style="background:var(--pee-dot)"></i>쉬</span><span><i style="background:var(--oops-dot)"></i>실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div>`;
+  <div class="legend"><span><i style="background:var(--pee-dot)"></i>🎯 성공</span><span><i style="background:var(--close-dot)"></i>💫 아깝다</span><span><i style="background:var(--oops-dot)"></i>💦 실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div>`;
 }
+function peeDots(evs){const r=[];for(const ep of peeEpisodes(evs))r.push({t:ep.start,cls:ep.out,big:true});for(const e of evs)if(e.type==='poo')r.push({t:e.t,cls:'poo'+(e.place==='pants'?' poooops':''),big:false});return r}
 function daySummary(evs){
-  const ints=peeIntervals(evs),p=[];
-  p.push(`<span class="pill pee">${mi('pee')}쉬 <b>${peeCnt(evs)}회</b>${cnt(evs,'accident')?` (실수 ${cnt(evs,'accident')} 포함)`:''}</span>`);
-  if(ints.length)p.push(`<span class="pill pee">평균 쉬텀 <b>${fmtDur(avg(ints))}</b></span>`,`<span class="pill pee">최단 <b>${fmtDur(Math.min(...ints))}</b></span>`,`<span class="pill pee">최장 <b>${fmtDur(Math.max(...ints))}</b></span>`);
-  p.push(`<span class="pill poo">${mi('poo')}응가 <b>${cnt(evs,'poo')}회</b></span>`);
+  const c=outcomes(evs),ints=peeIntervals(evs),po=pooOut(evs),p=[];
+  if(po.total)p.push(`<span class="pill poo">${mi('poo')}응가 <b>${po.total}회</b>${[po.potty?` · 🎯 ${po.potty}`:'',po.pants?` · 💦 ${po.pants}`:'',po.diaper?` · 🧷 ${po.diaper}`:''].join('')}</span>`);
+  const pn=cnt(evs,'pantsOn');if(pn)p.push(`<span class="pill pants">${mi('pantsOn')}팬티 <b>${pn}회</b></span>`);
   const dr=cnt(evs,'dry');if(dr)p.push(`<span class="pill dry">${mi('dry')}뽀송 <b>${dr}회</b></span>`);
-  const po=cnt(evs,'pantsOn'),ac=accCnt(evs);if(po)p.push(`<span class="pill pants">${mi('pantsOn')}팬티 <b>${po}회</b></span>`);const pa=cnt(evs,'accident'),pb=pooOopsCnt(evs);if(pa)p.push(`<span class="pill oops">${mi('accident')}쉬 실수 <b>${pa}회</b></span>`);if(pb)p.push(`<span class="pill oops">${mi('pooOops')}응가 실수 <b>${pb}회</b></span>`);
-  return `<div class="pills">${p.join('')}</div>`;
+  return `${outcomeBar(c)||'<div class="empty" style="padding:6px">쉬 기록이 없어요</div>'}
+    ${ints.length?`<div class="sline">⏱ 쉬텀 평균 <b>${fmtDur(avg(ints))}</b> <small>(${fmtDur(Math.min(...ints))} ~ ${fmtDur(Math.max(...ints))})</small></div>`:''}
+    ${p.length?`<div class="pills">${p.join('')}</div>`:''}`;
 }
 
 
 /* ---------- daily report + Claude advice ---------- */
-function evLabel(e){if(e.type==='out')return e.place==='outing'?'외출 시작(부모와 함께)':'등원(어린이집)';if(e.type==='back')return '귀가';if(e.type==='memo')return '메모: '+(e.text||'');if(e.type==='poo')return e.place==='pants'?'응가 실수(팬티에)':e.place?`응가(${PLACES[e.place].slice(0,-1)})`:'응가';if(e.type==='accident')return '쉬 실수(팬티에)';return TYPES[e.type]?.label||e.type}
+function evLabel(e){if(e.type==='accident')return '쉬 실수(팬티에)';if(e.type==='out')return e.place==='outing'?'외출 시작(부모와 함께)':'등원(어린이집)';if(e.type==='back')return '귀가';if(e.type==='memo')return '메모: '+(e.text||'');if(e.type==='poo')return e.place==='pants'?'응가 실수(팬티에)':e.place?`응가(${PLACES[e.place].slice(0,-1)})`:'응가';if(e.type==='accident')return '쉬 실수(팬티에)';return TYPES[e.type]?.label||e.type}
 function dayStats(A,from){
   const evs=evsIn(A,from,from+DAY),ints=peeIntervals(evs);
   const segs=wearSegments(A,from,from+DAY),pantsMs=segs.filter(g=>g.kind==='pants').reduce((a,g)=>a+g.en-g.st,0);
   const dries=evs.filter(e=>e.type==='dry').map(e=>A.info[e.id].dryMs).filter(Boolean);
   return {evs,n:evs.length,pee:peeCnt(evs),avg:avg(ints),min:ints.length?Math.min(...ints):null,max:ints.length?Math.max(...ints):null,
-    peeOops:cnt(evs,'accident'),pooOops:evs.filter(e=>e.type==='poo'&&e.place==='pants').length,poo:cnt(evs,'poo'),
+    peeOops:peeOopsCnt(evs),...(o=>({ok:o.ok,close:o.close,oops:o.oops,rate:o.rate}))(outcomes(evs)),pooDiaper:evs.filter(e=>e.type==='poo'&&e.place==='diaper').length,pooOops:evs.filter(e=>e.type==='poo'&&e.place==='pants').length,poo:cnt(evs,'poo'),
     pooPotty:evs.filter(e=>e.type==='poo'&&e.place==='potty').length,pantsMs,pantsOn:cnt(evs,'pantsOn'),dryMax:dries.length?Math.max(...dries):null};
 }
 function reportPrompt(from){
   const A=analyze(),d=dayStats(A,from);
   const lines=d.evs.map(e=>{const det=A.info[e.id]?.detail;return `${fmtTime(e.t)} ${evLabel(e)}${det&&e.type!=='memo'?` — ${det}`:''}`});
   const hist=[];for(let i=1;i<=7;i++){const f=sod(addDays(from,-i)),x=dayStats(A,f);if(!x.n)continue;
-    hist.push(`${fmtDay(f)}: 쉬 ${x.pee}회, 평균 쉬텀 ${x.avg?fmtDur(x.avg):'-'}, 쉬 실수 ${x.peeOops}, 응가 ${x.poo}회(변기 ${x.pooPotty}, 팬티 실수 ${x.pooOops}), 팬티 착용 ${x.pantsMs?fmtDur(x.pantsMs):'0'}, 최장 뽀송 ${x.dryMax?fmtDur(x.dryMax):'-'}`)}
+    hist.push(`${fmtDay(f)}: 쉬 ${x.pee}회(성공 ${x.ok}·아깝다 ${x.close}·실수 ${x.oops}, 성공률 ${x.rate??'-'}%), 평균 쉬텀 ${x.avg?fmtDur(x.avg):'-'}, 응가 ${x.poo}회(변기 ${x.pooPotty}, 팬티 실수 ${x.pooOops}), 팬티 착용 ${x.pantsMs?fmtDur(x.pantsMs):'0'}, 최장 뽀송 ${x.dryMax?fmtDur(x.dryMax):'-'}`)}
   return `당신은 따뜻하고 경험 많은 유아 배변훈련 코치입니다. 아이를 재촉하거나 벌주지 않고, 아이 속도를 존중하는 방식(칭찬·일관성·정해진 시간에 변기 기회 주기)을 따릅니다.
 부모가 앱으로 기록한 실제 데이터를 보고, 부모가 오늘 바로 실천할 수 있는 조언을 주세요.
 
@@ -707,7 +770,9 @@ function reportPrompt(from){
 [리포트 날짜] ${fmtDay(from)}
 
 [기록 용어]
-- 쉬 실수/응가 실수 = 팬티에 한 것. 실수 후 10분 안에 변기에서 이어 한 쉬는 한 번으로 계산됨.
+- 쉬 한 번은 결과 하나로 분류: 성공(🎯 변기에서. 기저귀를 차고 있어도 변기에서 했으면 성공) / 아깝다(💫 팬티에 실수했지만 10분 안에 변기에서 마저 함 = 신호를 알아챈 긍정적 변화) / 실수(💦 팬티에 하고 끝). 성공률 = 성공 ÷ 전체 쉬.
+- 10분 안에 이어진 기록(연달아 누른 실수, 실수 후 변기)은 쉬 한 번으로 계산됨.
+- 응가 = 변기 / 팬티(실수) / 기저귀 / 기록 안 함.
 - 쉬텀 = 쉬와 쉬 사이 간격(잠든 시간이나 어린이집에 간 시간이 끼면 평균에서 제외).
 - 등원~귀가 = 어린이집에 있던 시간. 이 사이 기록은 대부분 비어 있으니 실수나 공백으로 보지 말 것(쉬텀 계산에서도 제외).
 - 외출 시작~귀가 = 부모와 함께 밖에 있던 시간. 이 사이 쉬는 정상적으로 기록·계산됨. 외출 중 패턴(참기, 낯선 화장실)도 참고할 것.
@@ -718,7 +783,7 @@ function reportPrompt(from){
 [그날 기록 — 시간순]
 ${lines.join('\n')||'(기록 없음)'}
 
-[그날 요약] 쉬 ${d.pee}회, 평균 쉬텀 ${d.avg?fmtDur(d.avg):'-'} (최단 ${d.min?fmtDur(d.min):'-'}, 최장 ${d.max?fmtDur(d.max):'-'}), 쉬 실수 ${d.peeOops}회, 응가 ${d.poo}회(변기 ${d.pooPotty}, 팬티 실수 ${d.pooOops}), 팬티 착용 총 ${d.pantsMs?fmtDur(d.pantsMs):'0'}, 최장 뽀송 ${d.dryMax?fmtDur(d.dryMax):'-'}
+[그날 요약] 쉬 ${d.pee}회(성공 ${d.ok}·아깝다 ${d.close}·실수 ${d.oops}, 성공률 ${d.rate??'-'}%), 평균 쉬텀 ${d.avg?fmtDur(d.avg):'-'} (최단 ${d.min?fmtDur(d.min):'-'}, 최장 ${d.max?fmtDur(d.max):'-'}), 응가 ${d.poo}회(변기 ${d.pooPotty}, 팬티 실수 ${d.pooOops}, 기저귀 ${d.pooDiaper}), 팬티 착용 총 ${d.pantsMs?fmtDur(d.pantsMs):'0'}, 최장 뽀송 ${d.dryMax?fmtDur(d.dryMax):'-'}
 
 [이전 7일 요약]
 ${hist.join('\n')||'(이전 기록 없음)'}
@@ -734,7 +799,7 @@ ${hist.join('\n')||'(이전 기록 없음)'}
 {"summary":["그날을 한 줄씩, 2~3개"],"good":["잘 된 점 1~2개"],"patterns":["눈여겨볼 패턴 1~3개"],"plan":[{"time":"언제","action":"무엇을"}],"caution":"","cheer":"부모에게 건네는 한마디(1문장)"}`;
 }
 function repDays(){const now=Date.now(),y=sod(addDays(now,-1)),t=sod(now);return {y,t}}
-function renderAdvice(r){
+function renderAdvice(r,k='advfull'){
   if(!r||!r.data)return '';
   const d=r.data,L=a=>Array.isArray(a)?a:[];
   const sec=(cls,ic,t,items)=>items.length?`<div class="advsec ${cls}"><h3>${mi(ic)}${t}</h3><ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'';
@@ -744,7 +809,7 @@ function renderAdvice(r){
     ${L(d.summary)[0]?`<p class="advpeek">${esc(L(d.summary)[0])}</p>`:''}
     ${plan.length?`<div class="chips2">${plan.map(x=>`<span class="pt">${esc(x.time||'오늘')}</span>`).join('')}</div>`:''}
     ${d.caution?`<div class="caution">🩺 ${esc(d.caution)}</div>`:''}
-    <details class="advfull" data-k="advfull"${S.open.advfull?' open':''}><summary><span class="more">조언 전체 보기</span></summary>
+    <details class="advfull" data-k="${k}"${S.open[k]?' open':''}><summary><span class="more">조언 전체 보기</span></summary>
       ${sec('', 'pee','한눈에',L(d.summary))}
       ${sec('good','dry','잘 되고 있어요',L(d.good))}
       ${sec('pat','accident','눈여겨볼 점',L(d.patterns))}
@@ -753,34 +818,39 @@ function renderAdvice(r){
     <div class="advmeta">${new Date(r.at).getMonth()+1}/${new Date(r.at).getDate()} ${fmtTime(r.at)}에 받은 조언 · AI가 기록을 보고 쓴 참고용 조언이에요</div>
   </div>`;
 }
+const pct=x=>Math.round(x)+'%';
 function cmpPill(label,val,prev,fmt,goodUp){
-  let arrow='';if(val!=null&&prev!=null&&Math.abs(val-prev)>(fmt===fmtDur?5*60000:0.4)){const up=val>prev;arrow=`<em class="${goodUp==null?'nt':up===goodUp?'up':'down'}">${up?'▲':'▼'}</em>`}
+  let arrow='';if(val!=null&&prev!=null&&Math.abs(val-prev)>(fmt===fmtDur?5*60000:fmt===pct?4:0.4)){const up=val>prev;arrow=`<em class="${goodUp==null?'nt':up===goodUp?'up':'down'}">${up?'▲':'▼'}</em>`}
   return `<div class="kv"><div class="l">${label}</div><div class="v num">${val!=null?fmt(val):'–'}${arrow}</div></div>`;
 }
 function renderReport(){
-  const A=analyze(),{y,t}=repDays();
-  if(S.repDay==null)S.repDay=dayStats(A,y).n?y:t;
-  const from=S.repDay,key=dayKey(from),d=dayStats(A,from);
+  const A=analyze(),{y}=repDays();
+  S.repDay=y;
+  const from=y,key=dayKey(from),d=dayStats(A,from);
   const prev=[1,2,3].map(i=>dayStats(A,sod(addDays(from,-i)))).filter(x=>x.n);
   const pa=k=>{const v=prev.map(x=>x[k]).filter(x=>x!=null);return v.length?avg(v):null};
   const n=x=>Math.round(x*10)/10+'회';
   const r=S.reports[key];
   const canAsk=!!S.sample||!!getKey();
   let advBox;
-  if(S.repBusy)advBox=`<div class="thinking">${MASCOT(false)}<div class="say">${esc(nameI())} 기록을 꼼꼼히 읽고 있어요… 30초쯤 걸려요</div></div><div style="text-align:center"><button class="todaybtn" id="repStop">그만두기</button></div>`;
-  else advBox=(r?renderAdvice(r):`<div class="empty">아직 받은 조언이 없어요.<br>${d.n?'아래 버튼을 누르면 AI 코치가 이 날 기록을 보고 조언해 줘요.':'이 날은 기록이 없어요.'}</div>`)
+  if(S.repBusy)advBox=`<div class="thinking">${MASCOT(false)}<div class="say">${esc(nameI())}의 어제 기록을 꼼꼼히 읽고 있어요… 30초쯤 걸려요</div></div><div style="text-align:center"><button class="todaybtn" id="repStop">그만두기</button></div>`;
+  else if(r)advBox=renderAdvice(r,'adv-'+key)+(S.repErr?`<div class="caution">${esc(S.repErr)}</div>`:'')+(canAsk?`<div style="text-align:center"><button class="todaybtn" id="repAsk">마음에 안 들면 다시 받기</button></div>`:'');
+  else advBox=`<div class="empty">${d.n?`어제 기록으로 오늘을 위한 조언을 받을 수 있어요.<br>하루에 한 번이면 충분해요.`:'어제는 기록이 없어서 리포트를 만들 수 없어요.<br>오늘 기록하면 내일 아침에 받을 수 있어요.'}</div>`
     +(S.repErr?`<div class="caution">${esc(S.repErr)}</div>`:'')
-    +(canAsk?`<button class="askbtn" id="repAsk" ${d.n?'':'disabled'}>${mi('pee')}${r?'조언 다시 받기':'AI 코치에게 조언 받기'}</button>`
-      :`<button class="askbtn" id="repCopy" ${d.n?'':'disabled'}>${mi('pee')}조언 받을 문구 복사하기</button><div class="note2" style="text-align:center">복사해서 Claude나 ChatGPT에 붙여 넣으면 조언을 받을 수 있어요.<br>설정(아이 이름 누르기)에 API 키를 넣으면 앱에서 바로 받아요.</div>`)
-    +(canAsk&&!S.sample?`<div class="note2" style="text-align:center">한 번 받을 때 수십 원 정도 · 누르지 않으면 요금 없음</div>`:'');
+    +(d.n?(canAsk?`<button class="askbtn" id="repAsk">${mi('pee')}어제 리포트 받기</button>${!S.sample?'<div class="note2" style="text-align:center">한 번 받을 때 수십 원 정도 · 누르지 않으면 요금 없음</div>':''}`
+      :`<button class="askbtn" id="repCopy">${mi('pee')}조언 받을 문구 복사하기</button><div class="note2" style="text-align:center">복사해서 Claude나 ChatGPT에 붙여 넣으면 조언을 받을 수 있어요.<br>설정(아이 이름 누르기)에 API 키를 넣으면 앱에서 바로 받아요.</div>`):'');
+  const past=Object.keys(S.reports).filter(k=>k<key&&S.reports[k]&&S.reports[k].data).sort().reverse().slice(0,14);
+  const pastHtml=past.length?`<section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('sleep')}지난 리포트</span> <span>최근 ${past.length}개</span></h2>
+    <div class="pastlist">${past.map(k=>{const [yy,mm,dd]=k.split('-').map(Number),f=new Date(yy,mm-1,dd).getTime();return `<details class="pastrep" data-k="past-${k}"${S.open['past-'+k]?' open':''}><summary><span class="pd-d">${fmtDay(f)}</span><span class="pd-p">${esc((S.reports[k].data.summary||[])[0]||'')}</span><span class="more">보기</span></summary>${renderAdvice(S.reports[k],'pastfull-'+k)}</details>`}).join('')}</div></section>`:'';
   return header()+`<div class="pagettl">${mi('wake')}${esc(nameI())}의 리포트</div>
-  <div class="seg" role="group" aria-label="날짜" style="grid-template-columns:1fr 1fr">${[[y,'어제'],[t,'오늘']].map(([f,l])=>`<button data-repday="${f}" aria-pressed="${from===f}">${mi(l==='어제'?'sleep':'wake')}${l} <small style="font-family:var(--f-body);font-size:11px">${fmtDay(f,false)}</small></button>`).join('')}</div>
-  <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('dry')}숫자로 보기</span> <span>▲▼ 이전 3일 평균과 비교</span></h2>
-    <div class="kvs">${cmpPill('쉬',d.pee,pa('pee'),n,null)}${cmpPill('평균 쉬텀',d.avg,pa('avg'),fmtDur,true)}${cmpPill('쉬 실수',d.peeOops,pa('peeOops'),n,false)}
-      ${cmpPill('응가',d.poo,pa('poo'),n,null)}${cmpPill('팬티 착용',d.pantsMs||null,pa('pantsMs'),fmtDur,true)}${cmpPill('최장 뽀송',d.dryMax,pa('dryMax'),fmtDur,true)}</div>
+  <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('wake')}어제 리포트</span> <span>${fmtDay(from)} 기록</span></h2>${advBox}</section>
+  <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('dry')}어제 숫자</span> <span>▲▼ 그전 3일 평균과 비교</span></h2>
+    <div class="kvs">${cmpPill('쉬',d.pee,pa('pee'),n,null)}${cmpPill('성공률',d.rate,pa('rate'),pct,true)}${cmpPill('평균 쉬텀',d.avg,pa('avg'),fmtDur,true)}
+      ${cmpPill('💫 아깝다',d.close,pa('close'),n,null)}${cmpPill('💦 실수',d.oops,pa('oops'),n,false)}${cmpPill('팬티 착용',d.pantsMs||null,pa('pantsMs'),fmtDur,true)}</div>
   </section>
-  <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('wake')}코치의 조언</span> <span>${fmtDay(from,false)} 기록 기준</span></h2>${advBox}</section>
-  ${weeklySection(A)}`;
+  ${weeklySection(A)}
+  ${pastHtml}
+  <button class="addbtn" id="openExport">📤 기록 내보내기 (엑셀 · PDF)</button>`;
 }
 let repCtl=null;
 const KEY_LS='shishi-key';
@@ -819,7 +889,11 @@ async function askAdvice(){
   }
 }
 function planCardToday(){
-  const {y}=repDays(),r=S.reports[dayKey(y)];if(!r||!r.data||!Array.isArray(r.data.plan)||!r.data.plan.length)return '';
+  const {y}=repDays(),r=S.reports[dayKey(y)];
+  if(!r||!r.data||!Array.isArray(r.data.plan)||!r.data.plan.length){
+    const A=analyze();if(!dayStats(A,y).n)return '';
+    return `<button class="card nudge" data-tab="report">${MASCOT(false)}<span><b>어제 리포트가 준비됐어요</b><small>눌러서 오늘의 작전 받기 →</small></span></button>`;
+  }
   const pl=r.data.plan;
   return `<details class="card plancard" data-k="plan"${S.open.plan?' open':''}><summary><span class="pc-t">${mi('wake')}오늘의 작전 <small>${pl.length}가지</small></span><span class="pc-peek">${esc(pl[0].time||pl[0].action||'')}${pl.length>1?` 외 ${pl.length-1}개`:''}</span><span class="more">전체 보기</span></summary>
     <ol class="planlist">${pl.map(x=>`<li>${x.time?`<span class="pt">${esc(x.time)}</span>`:''}<span class="pa">${esc(x.action||'')}</span></li>`).join('')}</ol></details>`;
@@ -842,6 +916,7 @@ function renderToday(){
       <div class="big num">${A.lastPee?fmtAgo(now-A.lastPee.t):'기록 없음'}</div>
       <div class="since">${A.lastPee?whenLabel(A.lastPee.t)+(A.lastPee.type==='accident'?'에 팬티에 쉬했어요':'에 쉬했어요'):'아래 쉬했어요 버튼을 눌러 시작해요'}</div></div>
     <div class="minis">${mini('평균 쉬텀',ints.length?fmtDur(avg(ints)):'–')}${mini('가장 짧은',ints.length?fmtDur(Math.min(...ints)):'–')}${mini('가장 긴',ints.length?fmtDur(Math.max(...ints)):'–')}</div>
+    ${outcomeBar(outcomes(todays),true)}
     <div class="states">${stAway}${stSleep}${stPoo}</div>
   </section>
   <div class="tools"><span class="tt">오늘도 콕콕 기록해요</span><div class="right">${A.away?`<button class="awaybtn on" data-rec="back">🏠 돌아왔어요 <small>${A.awayKind==='outing'?'외출':'어린이집'} ${now-A.awayStart<60000?'방금':fmtDur(now-A.awayStart)+'째'}</small></button>`:S.awayPick?`<button class="awaybtn pick" data-out="daycare">🎒 어린이집</button><button class="awaybtn pick" data-out="outing">🚗 외출</button>`:`<button class="awaybtn" data-awaypick="1">🎒 나가요</button>`}
@@ -873,6 +948,7 @@ function renderRecords(){
     body=`<div class="navbar"><button class="navbtn" data-move="-1" aria-label="이전 날">‹</button><div class="ttl">${fmtDay(from)}</div><button class="navbtn" data-move="1" aria-label="다음 날">›</button></div>
     ${isToday?'':'<div style="text-align:center"><button class="todaybtn" data-goto="today">오늘로</button></div>'}
     <section class="card">${ringCard(from,A,isToday,center)}</section>
+    ${(()=>{const d=dupList(evs);return d.length?`<section class="card dupcard"><b>⚠️ 1분 안에 같은 기록이 ${d.length}개 더 있어요</b><small>두 번 눌린 것 같으면 정리해 주세요. 첫 번째 기록만 남겨요.</small><div class="duprows">${d.map(e=>`<span class="pill oops">${fmtTime(e.t)} ${esc(e.type==='poo'&&e.place==='pants'?'응가 실수':TYPES[e.type].label)}</span>`).join('')}</div><button class="askbtn" id="dupClean" data-day="${from}" style="margin-top:4px">중복 ${d.length}개 정리하기</button></section>`:''})()}
     <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('pee')}하루 요약</span></h2>${daySummary(evs)}</section>
     <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('dry')}기록</span> <span>최근 기록이 위</span></h2>${timeline(evs,A,isToday)}</section>`;
   } else if(S.view==='week'){
@@ -881,21 +957,21 @@ function renderRecords(){
     for(let i=6;i>=0;i--){const from=addDays(mon,i),evs=evsIn(A,from,from+DAY),ints=peeIntervals(evs);allInts.push(...ints);poos+=cnt(evs,'poo');accs+=accCnt(evs);
       const dt=new Date(from);let strip='';for(const se of [...A.sleeps,...A.aways,...A.outings]){const st=Math.max(se.start,from),en=Math.min(se.end??Date.now(),from+DAY);if(en>st)strip+=`<span class="nt" style="left:${(st-from)/DAY*100}%;width:${(en-st)/DAY*100}%"></span>`}
       for(const g of wearSegments(A,from,from+DAY))strip+=`<span class="${g.kind==='pants'?'pb':'db'}" style="left:${(g.st-from)/DAY*100}%;width:${Math.max(.8,(g.en-g.st)/DAY*100)}%"></span>`;
-      for(const e of evs){if(!(isPee(e)||e.type==='poo'))continue;strip+=`<span class="pd ${e.type}" style="left:${minOfDay(e.t)/14.4}%"></span>`}
-      const sum=evs.length?`💧 <b>${peeCnt(evs)}</b>${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>${cnt(evs,'accident')?` · 쉬 실수 <b>${cnt(evs,'accident')}</b>`:''}${pooOopsCnt(evs)?` · 응가 실수 <b>${pooOopsCnt(evs)}</b>`:''}`:'기록 없음';
+      for(const d of peeDots(evs))strip+=`<span class="pd ${d.cls}" style="left:${minOfDay(d.t)/14.4}%"></span>`;
+      const oc=outcomes(evs);const sum=evs.length?`💧 <b>${oc.total}</b>${oc.total?` · 🎯 <b>${oc.rate}%</b>`:''}${ints.length?` · 쉬텀 <b>${fmtDur(avg(ints))}</b>`:''} · 💩 <b>${cnt(evs,'poo')}</b>`:'기록 없음';
       rows.push(`<button class="wrow${dayKey(from)===todayK?' is-today':''}" data-day="${from}"><span class="dl"><b>${DOW[dt.getDay()]}</b>${dt.getMonth()+1}/${dt.getDate()}</span><span class="strip">${strip}</span><span class="wsum">${sum}</span></button>`)}
     body=`<div class="navbar"><button class="navbtn" data-move="-7" aria-label="이전 주">‹</button><div class="ttl">${fmtDay(mon,false)} – ${fmtDay(sun,false)}</div><button class="navbtn" data-move="7" aria-label="다음 주">›</button></div>
     <section class="card"><h2>이번 주 <span>최근 날짜가 위 · 눌러서 하루 보기</span></h2>
       <div class="axis"><span></span><div class="hrs"><span style="left:0">0시</span><span style="left:25%">6</span><span style="left:50%">12</span><span style="left:75%">18</span><span style="left:100%">24</span></div></div>
       ${rows.join('')}
-      <div class="legend"><span><i style="background:var(--pee-dot)"></i>쉬</span><span><i style="background:var(--oops-dot)"></i>실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div></section>`;
+      <div class="legend"><span><i style="background:var(--pee-dot)"></i>🎯 성공</span><span><i style="background:var(--close-dot)"></i>💫 아깝다</span><span><i style="background:var(--oops-dot)"></i>💦 실수</span><span><i style="background:var(--poo-dot)"></i>응가</span><span><i class="band"></i>팬티</span><span><i class="band" style="background:var(--diaper-band)"></i>기저귀</span><span><i class="band" style="background:var(--rest)"></i>잠·어린이집·외출</span></div></section>`;
   } else {
     const c=new Date(S.cursor),y=c.getFullYear(),m=c.getMonth(),first=new Date(y,m,1),lead=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),todayK=dayKey(Date.now());
     let cells=['월','화','수','목','금','토','일'].map(w=>`<div class="wd${w==='일'?' sun':w==='토'?' sat':''}">${w}</div>`).join('');
     for(let i=0;i<lead;i++)cells+='<div class="mc blank"></div>';
     let mInts=[],mPoo=0,mAcc=0,mDays=0;
     for(let d=1;d<=days;d++){const from=new Date(y,m,d).getTime(),evs=evsIn(A,from,from+DAY),ints=peeIntervals(evs);mInts.push(...ints);mPoo+=cnt(evs,'poo');mAcc+=accCnt(evs);if(evs.length)mDays++;
-      const pe=peeCnt(evs),po=cnt(evs,'poo'),ac=cnt(evs,'accident');
+      const pe=peeCnt(evs),po=cnt(evs,'poo'),ac=peeOopsCnt(evs);
       cells+=`<button class="mc${dayKey(from)===todayK?' is-today':''}${evs.length?' has':''}" data-day="${from}" aria-label="${m+1}월 ${d}일"><span class="n">${d}</span>${pe?`<span class="c">${mi('pee')}${pe}</span>`:''}${po?`<span class="c">${mi('poo')}${po}</span>`:''}${ac?`<span class="c">${mi('accident')}${ac}</span>`:''}</button>`}
     body=`<div class="navbar"><button class="navbtn" data-month="-1" aria-label="이전 달">‹</button><div class="ttl">${y}년 ${m+1}월</div><button class="navbtn" data-month="1" aria-label="다음 달">›</button></div>
     <section class="card"><div class="mgrid">${cells}</div></section>
@@ -922,8 +998,8 @@ function weeklySection(A){
   <section class="card"><h2><span style="font-size:inherit;color:inherit;font-family:inherit">${mi('dry')}이번 주 한눈에</span> <span>최근 7일</span></h2>
     <div class="tiles">
       ${tile('a','pantsOn','팬티 착용',`${cnt(wk,'pantsOn')}회`,avgWear!=null?`평균 ${fmtDur(avgWear)}`:'')}
-      ${tile('c','accident','실수',`${accCnt(wk)}회`,`쉬 ${cnt(wk,'accident')} · 응가 ${poos.filter(e=>e.place==='pants').length}`)}
-      ${tile('p','poo','응가',`${poos.length}회`,`변기 ${potty}회`)}
+      ${(()=>{const oc=outcomes(wk);return tile('c','pee','쉬 성공률',oc.total?`${oc.rate}%`:'–',`🎯${oc.ok} 💫${oc.close} 💦${oc.oops}`)})()}
+      ${tile('p','poo','응가',`${poos.length}회`,`🎯 변기 ${potty} · 💦 ${poos.filter(e=>e.place==='pants').length}`)}
       ${tile('d','dry','최장 뽀송',dries.length?fmtDur(Math.max(...dries)):'–',`확인 ${dries.length}회`)}
       ${tile('s','sleep','하루 평균 잠',slAvg!=null?fmtDur(slAvg):'–','')}
       ${tile('b','diaper','기록한 날',`${new Set(wk.map(e=>dayKey(e.t))).size}일`,'')}
@@ -941,11 +1017,15 @@ function render(){
 
 /* ---------- toast ---------- */
 let toastTimer;
+const AMTS={drip:'찔끔',full:'흠뻑'};
 function toast(msg,undoId,ask){
   clearTimeout(toastTimer);
-  $('#toastHost').innerHTML=`<div class="toast" role="status"><div class="r"><span>${msg}</span>${undoId?'<button id="undoBtn">되돌리기</button>':''}</div>${ask?`<div class="q"><span>어디에 했어요?</span>${Object.entries(PLACES).map(([k,v])=>`<button data-place="${k}">${v.slice(0,-1)}</button>`).join('')}</div>`:''}</div>`;
+  const q=ask==='amt'?`<div class="q"><span>얼마나?</span>${Object.entries(AMTS).map(([k,v])=>`<button data-amt="${k}">${v}</button>`).join('')}</div>`
+    :ask?`<div class="q"><span>어디에 했어요?</span>${Object.entries(PLACES).map(([k,v])=>`<button data-place="${k}">${v.slice(0,-1)}</button>`).join('')}</div>`:'';
+  $('#toastHost').innerHTML=`<div class="toast" role="status"><div class="r"><span>${msg}</span>${undoId?'<button id="undoBtn">되돌리기</button>':''}</div>${q}</div>`;
   if(undoId)$('#undoBtn').onclick=()=>{removeEvent(undoId);$('#toastHost').innerHTML=''};
-  if(ask)document.querySelectorAll('[data-place]').forEach(b=>b.onclick=()=>{updateEvent(undoId,{place:b.dataset.place});toast(`응가 · ${PLACES[b.dataset.place]} 했어요`)});
+  document.querySelectorAll('[data-place]').forEach(b=>b.onclick=()=>{updateEvent(undoId,{place:b.dataset.place});toast(`응가 · ${PLACES[b.dataset.place]} 했어요`)});
+  document.querySelectorAll('[data-amt]').forEach(b=>b.onclick=()=>{updateEvent(undoId,{amt:b.dataset.amt});toast(b.dataset.amt==='drip'?'💦 찔끔 실수로 기록했어요 · 변기에서 마저 하면 쉬했어요를 눌러 주세요':'💦 흠뻑 실수로 기록했어요')});
   toastTimer=setTimeout(()=>{$('#toastHost').innerHTML=''},ask?8000:undoId?5000:3000);
 }
 
@@ -969,6 +1049,7 @@ function openSheet(id){
     $('#veil').onclick=ev=>{if(ev.target.id==='veil')close()};
     document.querySelectorAll('[data-type]').forEach(b=>b.onclick=()=>{keep();e.type=b.dataset.type;draw()});
     document.querySelectorAll('[data-pl]').forEach(b=>b.onclick=()=>{keep();e.place=b.dataset.pl||undefined;draw()});
+    document.querySelectorAll('[data-amtpick]').forEach(b=>b.onclick=()=>{keep();e.amt=b.dataset.amtpick||undefined;draw()});
     $('#sCancel').onclick=close;
     $('#sSave').onclick=()=>{
       const dv=$('#fDate').value,tv=$('#fTime').value;if(!dv||!tv)return;
@@ -976,6 +1057,7 @@ function openSheet(id){
       if(e.type==='memo'){const tx=($('#fText')?.value||'').trim();if(!tx){$('#fText').focus();return}p.text=tx}
       if(e.type==='poo'&&e.place)p.place=e.place;
       if(e.type==='out')p.place=e.place==='outing'?'outing':'daycare';
+      if(e.type==='accident'&&e.amt)p.amt=e.amt;
       if(id)updateEvent(id,p);else addEvent(p);
       close();toast(id?'수정했어요':'추가했어요');
     };
@@ -992,6 +1074,17 @@ function burst(el,icon){
     sp.style.left=cx-8+'px';sp.style.top=cy-10+'px';sp.style.setProperty('--dx',Math.cos(a)*d+'px');sp.style.setProperty('--dy',Math.sin(a)*d+'px');sp.style.setProperty('--r',(Math.random()*80-40)+'deg');
     document.body.appendChild(sp);setTimeout(()=>sp.remove(),850)});
 }
+const DUP_MS=60000;
+const sameKind=(e,k,extra)=>e.type===k&&(k!=='poo'||(e.place==='pants')===(!!extra&&extra.place==='pants'));
+function guardRecord(k,el,extra){
+  const recent=S.events.find(e=>sameKind(e,k,extra)&&Date.now()-e.t<DUP_MS&&Date.now()>=e.t);
+  if(!recent||k==='sleep'||k==='wake'||k==='out'||k==='back')return doRecord(k,el,extra);
+  window.__dupPending={k,extra};clearTimeout(toastTimer);
+  $('#toastHost').innerHTML=`<div class="toast" role="status"><div class="r"><span>${TYPES[k].icon} ${fmtTime(recent.t)}에 방금 기록했어요. 한 번 더 기록할까요?</span><button id="dupAgain">또 기록</button></div></div>`;
+  toastTimer=setTimeout(()=>{$('#toastHost').innerHTML='';window.__dupPending=null},5000);
+}
+function dupList(evs){const out=[],asc=[...evs].sort((a,b)=>a.t-b.t);for(let i=1;i<asc.length;i++){const e=asc[i];if(e.type==='memo')continue;const prev=asc.slice(0,i).reverse().find(x=>x.type===e.type&&(e.type!=='poo'||(x.place==='pants')===(e.place==='pants')));if(prev&&e.t-prev.t<DUP_MS&&!out.includes(prev))out.push(e)}return out}
+async function cleanDups(from){const d=dupList(evsIn(analyze(),from,from+DAY));for(const e of d)await removeEvent(e.id);toast(`중복 기록 ${d.length}개를 정리했어요`)}
 function doRecord(k,el,extra){
   if(el)burst(el,TYPES[k].icon);
   S.say={text:extra&&extra.place==='pants'?'괜찮아요, 기록해 둘게요 🫧':k==='out'&&extra&&extra.place==='outing'?'즐거운 외출! 🚗':SAY[k],until:Date.now()+3000};
@@ -999,7 +1092,7 @@ function doRecord(k,el,extra){
   return addEvent({type:k,t:Date.now(),...(extra||{})}).then(id=>{
     const A=analyze(),I=A.info[id]||{};let msg=`${TYPES[k].icon} ${fmtTime(Date.now())} ${extra&&extra.place==='pants'?'응가 실수 기록':k==='out'?(extra&&extra.place==='outing'?'외출 기록':'등원 기록'):TYPES[k].done}`;
     if(I.cont)msg+=' · 바로 전 쉬와 한 번으로 계산';else if(k==='accident'&&I.pants)msg+=` · ${I.pants}`;if(I.gap)msg+=` · ${I.gap.label} ${fmtDur(I.gap.ms)}`;else if(I.detail&&(k==='poo'||k==='dry'||k==='wake'||k==='back'))msg+=` · ${I.detail}`;
-    toast(msg,id,k==='poo'&&!(extra&&extra.place));
+    toast(msg,id,k==='poo'&&!(extra&&extra.place)?'poo':null);
     const b=document.querySelector(`[data-rec="${k}"]`);if(b){b.classList.add('flash');setTimeout(()=>b.classList.remove('flash'),500)}
   });
 }
@@ -1015,6 +1108,125 @@ function quickFromUrl(){
   if(S.events.some(e=>e.type===k&&Date.now()-e.t<60000)){toast(`${TYPES[k].icon} 1분 안에 이미 기록됐어요`);render();return}
   doRecord(k,null);
 }
+/* ---------- export: Excel (AI 상담용) + PDF (어린이집용) ---------- */
+const NOTE_LS='shishi-note';
+function getNote(){try{return localStorage.getItem(NOTE_LS)||''}catch(e){return ''}}
+function setNote(v){try{localStorage.setItem(NOTE_LS,v)}catch(e){}}
+const canPrint=()=>!(window.claude&&window.claude.use);
+function overlapMs(list,from,to){return list.reduce((a,x)=>{const st=Math.max(x.start,from),en=Math.min(x.end??Date.now(),to);return a+(en>st?en-st:0)},0)}
+function rangeDays(fromDay,toDay){const out=[];for(let t=sod(fromDay);t<=sod(toDay);t=addDays(t,1))out.push(t);return out}
+function exportData(fromDay,toDay){
+  const A=analyze(),days=rangeDays(fromDay,toDay);
+  const rows=days.map(f=>{const d=dayStats(A,f);const ints=peeIntervals(d.evs);
+    return {f,d,ints,sleep:overlapMs(A.sleeps,f,f+DAY),daycare:overlapMs(A.aways,f,f+DAY),outing:overlapMs(A.outings,f,f+DAY)}});
+  const rec=rows.filter(r=>r.d.n);
+  const all=rec.flatMap(r=>r.d.evs);
+  const allInts=rec.flatMap(r=>r.ints);
+  const wakeFirst=[];for(const e of all){if(isPee(e)){const det=A.info[e.id]&&A.info[e.id].detail||'';const m=det.match(/^일어나고 (.+) 후 첫 쉬/);if(m){const w=[...A.asc].reverse().find(x=>x.type==='wake'&&x.t<e.t);if(w)wakeFirst.push(e.t-w.t)}}}
+  const bin=t=>{const h=new Date(t).getHours();const b=Math.floor(h/2)*2;return `${b}~${b+2}시`};
+  const top=(list)=>{const c={};list.forEach(e=>{const k=bin(e.t);c[k]=(c[k]||0)+1});return Object.entries(c).sort((a,b)=>b[1]-a[1])};
+  const peeOops=accOnce(all),poos=all.filter(e=>e.type==='poo');
+  const pantsDays=rec.filter(r=>r.d.pantsMs>0);
+  return {A,days,rows,rec,all,allInts,wakeFirst,peeOops,poos,oopsBins:top(peeOops),pooBins:top(poos),pantsDays,wearingNow:A.pStart!=null};
+}
+function kidName(hide){return hide?'아이':(S.name||'아이')}
+const mins=ms=>ms==null?'':Math.round(ms/60000);
+function evDetail(A,e){const I=A.info[e.id]||{};if(e.type==='memo')return e.text||'';return I.detail||''}
+async function loadXlsx(){if(window.XLSX)return window.XLSX;await new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)});return window.XLSX}
+async function saveBlob(filename,blob){
+  if(window.claude&&window.claude.use){let dl=null;try{dl=await window.claude.use('downloads')}catch(e){}
+    if(!dl){toast('이 화면에서는 파일 저장이 안 돼요. 웹앱에서 해 주세요.');return}
+    try{await dl.save({filename,data:blob});toast('📁 저장했어요')}catch(e){if(e&&e.code!=='declined')toast('저장하지 못했어요')}return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);toast('📁 저장했어요');
+}
+async function exportXlsx(o){
+  let X;try{X=await loadXlsx()}catch(e){toast('엑셀 도구를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.');return}
+  const D=exportData(o.from,o.to),A=D.A;
+  const epOf={};for(const ep of peeEpisodes(D.all))for(const x of ep.evs)epOf[x.id]=OUT[ep.out].l;
+  const rec=[['날짜','요일','시각','종류','쉬 결과','상세','쉬텀(분)','쉬텀 계산','메모']];
+  for(const e of D.all){if(e.type==='memo'&&!o.memo)continue;const I=A.info[e.id]||{};const d=new Date(e.t);
+    rec.push([dayKey(e.t),DOW[d.getDay()],fmtTime(e.t),e.type==='memo'?'메모':evLabel(e),epOf[e.id]||'',e.type==='memo'?'':evDetail(A,e),I.gap&&I.gap.kind==='pee'?mins(I.gap.ms):'',I.gap&&I.gap.kind==='pee'?(I.gap.sleep?'제외(잠/어린이집 포함)':'포함'):I.cont?'앞 쉬와 한 번으로 계산':'',e.type==='memo'?e.text||'':''])}
+  const sum=[['날짜','요일','쉬(회)','성공(회)','아깝다(회)','실수(회)','성공률(%)','평균 쉬텀(분)','최단 쉬텀(분)','최장 쉬텀(분)','응가(회)','응가 변기(회)','응가 실수(회)','응가 기저귀(회)','팬티 착용(분)','최장 뽀송(분)','잠(분)','어린이집(분)','외출(분)']];
+  for(const r of D.rows){const d=r.d,dt=new Date(r.f);sum.push([dayKey(r.f),DOW[dt.getDay()],d.pee,d.ok,d.close,d.oops,d.rate??'',mins(d.avg),mins(d.min),mins(d.max),d.poo,d.pooPotty,d.pooOops,d.pooDiaper,mins(d.pantsMs)||0,mins(d.dryMax),mins(r.sleep)||0,mins(r.daycare)||0,mins(r.outing)||0])}
+  const info=[['항목','설명'],['아이',`${kidName(o.hide)}${monthsNow()?`, ${monthsNow()}개월`:''}`],['기간',`${dayKey(o.from)} ~ ${dayKey(o.to)}`],
+    ['쉬','쉬 한 번 = 결과 하나. 10분 안에 이어진 기록(연달아 누른 실수, 실수 후 변기)은 한 번으로 셈.'],['성공','변기에서 쉬. 기저귀를 차고 있어도 변기에서 했으면 성공.'],['아깝다','팬티에 실수했지만 10분 안에 변기에서 마저 함. 신호를 알아챈 긍정적 변화.'],['실수','팬티에 쉬하고 끝.'],['성공률','성공 ÷ 전체 쉬 (%).'],
+    ['쉬텀','쉬와 쉬 사이 간격(분). 잠든 시간이나 어린이집 시간이 끼면 평균 계산에서 제외(기록 시트 "쉬텀 계산" 열 참고). 외출은 부모와 함께라 포함.'],
+    ['응가','변기 / 팬티(응가 실수) / 기저귀 / 기록 안 함으로 구분.'],['뽀송','기저귀/팬티를 확인했는데 젖지 않음. 상세에 마지막 쉬 이후 참은 시간.'],
+    ['팬티 착용/기저귀로 변경','그 시간대에 입은 것. 팬티 착용(분)은 하루 중 팬티를 입은 총 시간.'],
+    ['등원~돌아옴','어린이집에 있던 시간. 이 사이 기록은 비어 있을 수 있음.'],['외출~돌아옴','부모와 외출. 이 사이 기록은 정상 기록.'],
+    ['참고','부모가 앱 "쉬쉬기록"으로 직접 누른 기록이라 빠진 기록이 있을 수 있음.']];
+  const wb=X.utils.book_new();
+  const sh=(aoa,w)=>{const s=X.utils.aoa_to_sheet(aoa);s['!cols']=w.map(x=>({wch:x}));return s};
+  X.utils.book_append_sheet(wb,sh(rec,[11,4,6,16,8,34,9,22,24]),'기록');
+  X.utils.book_append_sheet(wb,sh(sum,[11,4,7,8,9,8,9,11,11,11,7,10,10,11,11,11,8,11,8]),'날짜별 요약');
+  X.utils.book_append_sheet(wb,sh(info,[18,80]),'설명');
+  const buf=X.write(wb,{bookType:'xlsx',type:'array'});
+  await saveBlob(`shishi_${dayKey(o.from)}_${dayKey(o.to)}.xlsx`,new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+}
+function exportPdf(o){
+  const D=exportData(o.from,o.to),rec=D.rec,n=rec.length||1;
+  const avgPee=rec.reduce((a,r)=>a+r.d.pee,0)/n;const oc=outcomes(D.all);
+  const ai=avg(D.allInts),wf=avg(D.wakeFirst);
+  const pooPl=k=>D.poos.filter(e=>e.place===k).length;
+  const pants=D.pantsDays.length?avg(D.pantsDays.map(r=>r.d.pantsMs)):null;
+  const lines=[];
+  if(ai)lines.push(`쉬는 보통 <b>${fmtDur(ai)}</b> 간격으로 해요. ${ai>40*60000?`${fmtDur(ai-15*60000)}쯤 지나면 화장실을 한 번 권해 주시면 좋아요.`:''}`);
+  if(wf)lines.push(`자고 일어나면 평균 <b>${fmtDur(wf)}</b> 안에 첫 쉬를 해요. 낮잠 뒤에 바로 화장실에 데려가 주세요.`);
+  if(D.peeOops.length)lines.push(`팬티에 쉬가 나온 건(실수·아깝다) 주로 <b>${D.oopsBins.slice(0,2).map(x=>x[0]).join(', ')}</b> 사이에 있었어요 (기간 중 ${D.peeOops.length}번).`);
+  else if(rec.length)lines.push('기간 중 팬티에 쉬가 나온 적이 없었어요.');
+  if(D.poos.length)lines.push(`응가는 주로 <b>${D.pooBins[0][0]}</b>에 해요. 변기 ${pooPl('potty')}번 · 기저귀 ${pooPl('diaper')}번 · 팬티 ${pooPl('pants')}번${D.poos.length-pooPl('potty')-pooPl('diaper')-pooPl('pants')?` · 기록 안 함 ${D.poos.length-pooPl('potty')-pooPl('diaper')-pooPl('pants')}번`:''}.`);
+  lines.push(`지금 집에서는 <b>${D.wearingNow?'팬티':'기저귀'}</b>를 입고 있어요.${pants?` 팬티를 입은 날은 하루 평균 ${fmtDur(pants)} 입었어요.`:''}`);
+  const memos=o.memo?D.all.filter(e=>e.type==='memo'):[];
+  const tbl=D.rows.map(r=>{const d=r.d,dt=new Date(r.f);return `<tr${d.n?'':' class="empty"'}><td>${dt.getMonth()+1}/${dt.getDate()} (${DOW[dt.getDay()]})</td><td>${d.n?d.pee:'-'}</td><td>${d.n?d.ok:'-'}</td><td>${d.n?d.close:'-'}</td><td>${d.n?d.oops:'-'}</td><td>${d.avg?fmtDur(d.avg):'-'}</td><td>${d.n?`${d.poo}${d.pooPotty||d.pooOops?` (${[d.pooPotty?`변기 ${d.pooPotty}`:'',d.pooOops?`실수 ${d.pooOops}`:''].filter(Boolean).join(', ')})`:''}`:'-'}</td><td>${d.pantsMs?fmtDur(d.pantsMs):'-'}</td><td>${r.daycare?fmtDur(r.daycare):'-'}</td></tr>`}).join('');
+  const mo=monthsNow();
+  const html=`<div class="pr">
+    <header class="pr-h"><div><div class="pr-k">쉬쉬기록 · 배변훈련 리포트</div><h1>${esc(kidName(o.hide))}${mo?` <small>${mo}개월</small>`:''}</h1></div>
+      <div class="pr-d">${fmtDay(o.from)} ~ ${fmtDay(o.to)}<br><small>${rec.length}일 기록 · ${fmtDay(Date.now(),false)} 작성</small></div></header>
+    <section class="pr-kv">
+      <div><span>하루 평균 쉬</span><b>${rec.length?(Math.round(avgPee*10)/10)+'회':'-'}</b></div>
+      <div><span>평균 쉬텀</span><b>${ai?fmtDur(ai):'-'}</b></div>
+      <div><span>기상 후 첫 쉬</span><b>${wf?fmtDur(wf):'-'}</b></div>
+      <div><span>쉬 성공률</span><b>${oc.total?oc.rate+'%':'-'}</b><small style="display:block;font-size:8pt;color:#5a6474">🎯${oc.ok} 💫${oc.close} 💦${oc.oops}</small></div>
+      <div><span>응가 (기간)</span><b>${D.poos.length}회</b></div>
+      <div><span>지금 입는 것</span><b>${D.wearingNow?'팬티':'기저귀'}</b></div>
+    </section>
+    <section class="pr-s"><h2>집에서 본 패턴</h2><ul>${lines.map(l=>`<li>${l}</li>`).join('')}</ul></section>
+    ${o.note.trim()?`<section class="pr-s pr-note"><h2>선생님께 부탁드려요</h2><p>${esc(o.note).replace(/\n/g,'<br>')}</p></section>`:''}
+    <section class="pr-s"><h2>날짜별 기록</h2><table><thead><tr><th>날짜</th><th>쉬</th><th>🎯 성공</th><th>💫 아깝다</th><th>💦 실수</th><th>평균 쉬텀</th><th>응가</th><th>팬티 착용</th><th>어린이집</th></tr></thead><tbody>${tbl}</tbody></table></section>
+    ${memos.length?`<section class="pr-s"><h2>메모</h2><ul class="pr-m">${memos.slice(-20).map(e=>`<li><b>${new Date(e.t).getMonth()+1}/${new Date(e.t).getDate()} ${fmtTime(e.t)}</b> ${esc(e.text||'')}</li>`).join('')}</ul></section>`:''}
+    <footer class="pr-f">부모가 앱으로 직접 기록한 자료예요. 빠진 기록이 있을 수 있고, 의료 진단이 아닌 참고 자료예요.</footer>
+  </div>`;
+  let area=document.getElementById('printArea');if(!area){area=document.createElement('div');area.id='printArea';document.body.appendChild(area)}
+  area.innerHTML=html;
+  setTimeout(()=>{try{window.print()}catch(e){toast('인쇄 창을 열지 못했어요')}},300);
+}
+function openExport(){
+  const now=Date.now();
+  $('#sheetHost').innerHTML=`<div class="veil" id="veil"><div class="sheet" role="dialog" aria-modal="true" aria-label="기록 내보내기">
+    <h3>📤 기록 내보내기</h3>
+    <div class="flabel">기간</div>
+    <div class="opts" id="exRange">${[['7','최근 7일'],['14','최근 14일'],['30','최근 30일'],['c','직접 고르기']].map(([k,v],i)=>`<button data-exr="${k}" aria-pressed="${i===0}">${v}</button>`).join('')}</div>
+    <div class="fields" id="exCustom" hidden><label>시작<input type="date" id="exFrom" value="${dayKey(addDays(now,-6))}"></label><label>끝<input type="date" id="exTo" value="${dayKey(now)}"></label></div>
+    <label class="chk"><input type="checkbox" id="exMemo" checked> 메모 포함</label>
+    <label class="chk"><input type="checkbox" id="exHide"> 아이 이름 가리기 ("아이"로 표시)</label>
+    <div class="exbtns">
+      <button class="exb" id="exXlsx"><b>📊 엑셀</b><small>AI 상담용 · 모든 기록 + 날짜별 요약</small></button>
+      ${canPrint()?`<button class="exb" id="exPdf"><b>📄 PDF</b><small>어린이집 상담용 · 한눈에 보는 요약</small></button>`:`<div class="note2">PDF는 홈 화면에 설치한 웹앱에서 만들 수 있어요.</div>`}
+    </div>
+    ${canPrint()?`<label class="memo-field">선생님께 부탁드려요 (PDF에 들어가요)<textarea id="exNote" rows="3" maxlength="300" placeholder="예: 점심 먹고 15분쯤 변기에 앉혀 주세요. 실수해도 괜찮다고 말해 주세요.">${esc(getNote())}</textarea></label>`:''}
+    <div class="note2">AI 조언은 들어가지 않아요. PDF는 인쇄 창이 뜨면 "PDF로 저장"을 골라 주세요.</div>
+    <div class="acts"><button class="cancel" id="sCancel">닫기</button></div>
+  </div></div>`;
+  let range='7';
+  const close=()=>{$('#sheetHost').innerHTML=''};
+  $('#veil').onclick=ev=>{if(ev.target.id==='veil')close()};$('#sCancel').onclick=close;
+  document.querySelectorAll('[data-exr]').forEach(b=>b.onclick=()=>{range=b.dataset.exr;document.querySelectorAll('[data-exr]').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#exCustom').hidden=range!=='c'});
+  const opts=()=>{let from,to;if(range==='c'){const f=$('#exFrom').value,t=$('#exTo').value;if(!f||!t)return null;from=new Date(f+'T00:00').getTime();to=new Date(t+'T00:00').getTime();if(from>to)[from,to]=[to,from]}else{to=sod(now);from=sod(addDays(now,-(+range-1)))}
+    const note=$('#exNote')?$('#exNote').value:'';setNote(note);return {from,to,memo:$('#exMemo').checked,hide:$('#exHide').checked,note}};
+  $('#exXlsx').onclick=async()=>{const o=opts();if(!o)return toast('기간을 골라 주세요');$('#exXlsx').disabled=true;await exportXlsx(o);$('#exXlsx').disabled=false};
+  if($('#exPdf'))$('#exPdf').onclick=()=>{const o=opts();if(!o)return toast('기간을 골라 주세요');exportPdf(o)};
+}
+
 function openSettings(){
   const mo=monthsNow();
   $('#sheetHost').innerHTML=`<div class="veil" id="veil"><div class="sheet" role="dialog" aria-modal="true" aria-label="아이 정보">
@@ -1035,7 +1247,10 @@ function openSettings(){
 /* ---------- interactions ---------- */
 document.addEventListener('click',ev=>{
   const rec=ev.target.closest('[data-rec]');
-  if(rec){doRecord(rec.dataset.rec,rec);return}
+  if(rec){guardRecord(rec.dataset.rec,rec);return}
+  if(ev.target.closest('#dupAgain')){const g=window.__dupPending;window.__dupPending=null;$('#toastHost').innerHTML='';if(g)doRecord(g.k,null,g.extra);return}
+  if(ev.target.closest('#dupClean')){cleanDups(+ev.target.closest('#dupClean').dataset.day);return}
+  if(ev.target.closest('#openExport')){openExport();return}
   if(ev.target.closest('[data-awaypick]')){S.awayPick=true;render();clearTimeout(window.__apk);window.__apk=setTimeout(()=>{if(S.awayPick){S.awayPick=false;render()}},6000);return}
   const ob=ev.target.closest('[data-out]');if(ob){S.awayPick=false;doRecord('out',ob,{place:ob.dataset.out});return}
   const rd=ev.target.closest('[data-repday]');if(rd){S.repDay=+rd.dataset.repday;S.repErr='';render();return}
@@ -1044,7 +1259,7 @@ document.addEventListener('click',ev=>{
   if(ev.target.closest('#repCopy')){const txt=reportPrompt(S.repDay).replace('다음 JSON 하나로만 답하세요:','아래 항목으로 나눠서 답해 주세요(JSON 말고 보기 좋은 글로):');
     const done=()=>toast('📋 복사했어요. Claude 앱에 붙여 넣어 주세요');
     try{navigator.clipboard.writeText(txt).then(done,()=>fallbackCopy(txt,done))}catch(x){fallbackCopy(txt,done)}return}
-  const po=ev.target.closest('[data-poooops]');if(po){doRecord('poo',po,{place:'pants'});return}
+  const po=ev.target.closest('[data-poooops]');if(po){guardRecord('poo',po,{place:'pants'});return}
   const wb=ev.target.closest('[data-wear]');
   if(wb){const k=wb.dataset.wear,wearingNow=analyze().pStart!=null;
     if((k==='pantsOn')===wearingNow){toast(wearingNow?'🩲 지금 팬티 입고 있어요':'🧷 지금 기저귀 차고 있어요');return}
