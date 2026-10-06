@@ -580,12 +580,13 @@ function analyze(){
   SLEEPS=sleeps;
   const aways=[],outings=[];let aStart=null,aKind=null;for(const e of asc){if(e.type==='out'){if(aStart==null){aStart=e.t;aKind=e.place==='outing'?'outing':'daycare'}}else if(e.type==='back'){if(aStart!=null){(aKind==='outing'?outings:aways).push({start:aStart,end:e.t});aStart=null}}}
   if(aStart!=null)(aKind==='outing'?outings:aways).push({start:aStart,end:null});
-  AWAYS=aways;let lastBack=null;
+  const quietOut=outings.filter(o=>!asc.some(x=>isPee(x)&&x.t>=o.start&&x.t<=(o.end??Date.now()))).map(o=>({...o,kind:'outing'}));
+  AWAYS=[...aways.map(a=>({...a,kind:'daycare'})),...quietOut];let lastBack=null;
   for(const e of asc){
     const I=info[e.id]={detail:'',gap:null};
     if(isPee(e)&&lastPee&&e.t-lastPee.t<MERGE){I.cont=true;if(lastPee.type==='accident'&&e.type==='pee'&&info[lastPee.id])info[lastPee.id].rescued=true;I.detail=`${fmtTime(lastPee.t)} ${lastPee.type==='accident'?'실수':'쉬'}에 이어서 · 한 번으로 계산`;lastPee=e}
     else if(isPee(e)){let base;const slp=lastPee&&onlySleptBetween(lastPee.t,e.t),aw=lastPee&&awayBetween(lastPee.t,e.t),sl=slp||aw;
-      if(lastPee&&dayKey(lastPee.t)===dayKey(e.t)){I.gap={kind:'pee',label:aw?'어린이집 포함':slp?'잠 포함':'쉬텀',ms:e.t-lastPee.t,sleep:sl};base=''}else base='';
+      if(lastPee&&dayKey(lastPee.t)===dayKey(e.t)){I.gap={kind:'pee',label:aw?(awayKindBetween(lastPee.t,e.t)==='outing'?'외출 포함':'어린이집 포함'):slp?'잠 포함':'쉬텀',ms:e.t-lastPee.t,sleep:sl};base=''}else base='';
       if(lastWake&&(!lastPee||lastWake.t>lastPee.t))base=`일어나고 ${fmtDur(e.t-lastWake.t)} 후 첫 쉬`;
       if(lastBack&&(!lastPee||lastBack.t>lastPee.t)&&(!lastWake||lastBack.t>lastWake.t))base=`하원하고 ${fmtDur(e.t-lastBack.t)} 후 첫 쉬`;
       I.detail=base;lastPee=e}
@@ -633,6 +634,7 @@ let SLEEPS=[];
 let AWAYS=[];
 const onlySleptBetween=(a,b)=>SLEEPS.some(x=>x.start<b&&(x.end??Date.now())>a);
 const awayBetween=(a,b)=>AWAYS.some(x=>x.start<b&&(x.end??Date.now())>a);
+const awayKindBetween=(a,b)=>{const x=AWAYS.find(x=>x.start<b&&(x.end??Date.now())>a);return x&&x.kind};
 const sleptBetween=(a,b)=>onlySleptBetween(a,b)||awayBetween(a,b);
 function peeIntervals(evs){const p=peeEpisodes(evs),o=[];for(let i=1;i<p.length;i++)if(dayKey(p[i].start)===dayKey(p[i-1].end)&&!sleptBetween(p[i-1].end,p[i].start))o.push(p[i].start-p[i-1].end);return o}
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
@@ -780,7 +782,7 @@ function reportPrompt(from){
 - 응가 = 변기 / 팬티(실수) / 기저귀 / 기록 안 함.
 - 쉬텀 = 쉬와 쉬 사이 간격(잠든 시간이나 어린이집에 간 시간이 끼면 평균에서 제외).
 - 등원~귀가 = 어린이집에 있던 시간. 이 사이 기록은 대부분 비어 있으니 실수나 공백으로 보지 말 것(쉬텀 계산에서도 제외).
-- 외출 시작~귀가 = 부모와 함께 밖에 있던 시간. 이 사이 쉬는 정상적으로 기록·계산됨. 외출 중 패턴(참기, 낯선 화장실)도 참고할 것.
+- 외출 시작~귀가 = 부모와 함께 밖에 있던 시간. 외출 중 쉬를 기록했으면 정상 계산, 하나도 기록하지 않았으면 기록 못 한 것으로 보고 쉬텀 계산에서 제외. 외출 중 패턴(참기, 낯선 화장실)도 참고할 것.
 - 뽀송 = 기저귀/팬티를 확인했는데 젖지 않음. "마지막 쉬 후 X 동안 뽀송"은 그만큼 참았다는 뜻.
 - 팬티 착용/기저귀로 변경 = 그 시간대에 무엇을 입었는지.
 - 기록이 빠진 시간이 있을 수 있음(어린이집, 외출 등). 없는 기록을 실패로 단정하지 말 것.
@@ -1150,7 +1152,7 @@ async function exportXlsx(o){
   const epOf={};for(const ep of peeEpisodes(D.all))for(const x of ep.evs)epOf[x.id]=OUT[ep.out].l;
   const rec=[['날짜','요일','시각','종류','쉬 결과','상세','쉬텀(분)','쉬텀 계산','메모']];
   for(const e of D.all){if(e.type==='memo'&&!o.memo)continue;const I=A.info[e.id]||{};const d=new Date(e.t);
-    rec.push([dayKey(e.t),DOW[d.getDay()],fmtTime(e.t),e.type==='memo'?'메모':evLabel(e),epOf[e.id]||'',e.type==='memo'?'':evDetail(A,e),I.gap&&I.gap.kind==='pee'?mins(I.gap.ms):'',I.gap&&I.gap.kind==='pee'?(I.gap.sleep?'제외(잠/어린이집 포함)':'포함'):I.cont?'앞 쉬와 한 번으로 계산':'',e.type==='memo'?e.text||'':''])}
+    rec.push([dayKey(e.t),DOW[d.getDay()],fmtTime(e.t),e.type==='memo'?'메모':evLabel(e),epOf[e.id]||'',e.type==='memo'?'':evDetail(A,e),I.gap&&I.gap.kind==='pee'?mins(I.gap.ms):'',I.gap&&I.gap.kind==='pee'?(I.gap.sleep?'제외(잠/어린이집/기록 없는 외출 포함)':'포함'):I.cont?'앞 쉬와 한 번으로 계산':'',e.type==='memo'?e.text||'':''])}
   const sum=[['날짜','요일','쉬(회)','성공(회)','아깝다(회)','실수(회)','성공률(%)','평균 쉬텀(분)','최단 쉬텀(분)','최장 쉬텀(분)','응가(회)','응가 변기(회)','응가 실수(회)','응가 기저귀(회)','팬티 착용(분)','최장 뽀송(분)','잠(분)','어린이집(분)','외출(분)']];
   for(const r of D.rows){const d=r.d,dt=new Date(r.f);sum.push([dayKey(r.f),DOW[dt.getDay()],d.pee,d.ok,d.close,d.oops,d.rate??'',mins(d.avg),mins(d.min),mins(d.max),d.poo,d.pooPotty,d.pooOops,d.pooDiaper,mins(d.pantsMs)||0,mins(d.dryMax),mins(r.sleep)||0,mins(r.daycare)||0,mins(r.outing)||0])}
   const info=[['항목','설명'],['아이',`${kidName(o.hide)}${monthsNow()?`, ${monthsNow()}개월`:''}`],['기간',`${dayKey(o.from)} ~ ${dayKey(o.to)}`],
@@ -1158,7 +1160,7 @@ async function exportXlsx(o){
     ['쉬텀','쉬와 쉬 사이 간격(분). 잠든 시간이나 어린이집 시간이 끼면 평균 계산에서 제외(기록 시트 "쉬텀 계산" 열 참고). 외출은 부모와 함께라 포함.'],
     ['응가','변기 / 팬티(응가 실수) / 기저귀 / 기록 안 함으로 구분.'],['뽀송','기저귀/팬티를 확인했는데 젖지 않음. 상세에 마지막 쉬 이후 참은 시간.'],
     ['팬티 착용/기저귀로 변경','그 시간대에 입은 것. 팬티 착용(분)은 하루 중 팬티를 입은 총 시간.'],
-    ['등원~돌아옴','어린이집에 있던 시간. 이 사이 기록은 비어 있을 수 있음.'],['외출~돌아옴','부모와 외출. 이 사이 기록은 정상 기록.'],
+    ['등원~돌아옴','어린이집에 있던 시간. 이 사이 기록은 비어 있을 수 있음.'],['외출~돌아옴','부모와 외출. 외출 중 쉬 기록이 있으면 정상 계산, 하나도 없으면 쉬텀 계산에서 제외.'],
     ['참고','부모가 앱 "쉬쉬기록"으로 직접 누른 기록이라 빠진 기록이 있을 수 있음.']];
   const wb=X.utils.book_new();
   const sh=(aoa,w)=>{const s=X.utils.aoa_to_sheet(aoa);s['!cols']=w.map(x=>({wch:x}));return s};
