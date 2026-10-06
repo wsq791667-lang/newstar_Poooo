@@ -104,6 +104,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .hero{position:relative;overflow:hidden;background:var(--pee);border-radius:30px;border:3px solid var(--sticker);box-shadow:4px 5px 0 rgba(47,108,166,.18);padding:18px 18px 14px;color:var(--pee-ink);display:flex;flex-direction:column;gap:10px}
 .hero::after{content:"";background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.6) 0 18%,transparent 19%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.45) 0 10%,transparent 11%);width:120px;height:120px;position:absolute;right:14px;top:6px;font-size:64px;opacity:.18;transform:rotate(14deg);pointer-events:none}
 .hero>*{position:relative;z-index:1}
+.hero.daycare{background:var(--away);color:var(--away-ink);box-shadow:4px 5px 0 rgba(162,96,42,.18)}
 .hero .lbl{font-size:14px;font-weight:800}
 .hero .big{font-family:var(--f-display);font-size:clamp(32px,10vw,44px);line-height:1.1}
 .hero .since{font-size:13px;opacity:.85}
@@ -701,7 +702,7 @@ function header(){
   const nameEl=`<button class="kid" id="nameBtn" aria-label="아이 정보 설정">${esc(S.name||'우리 아이')}${mo?`<span class="agechip">${mo}개월</span>`:''}<span class="gear" aria-hidden="true">⚙︎</span>${S.name?'':'<small>정보 입력</small>'}</button>`;
   const hot=S.say&&S.say.until>Date.now();
   const lp=[...S.events].filter(isPee).sort((a,b)=>b.t-a.t)[0];
-  const idle=lp?`마지막 쉬는 ${fmtAgo(Date.now()-lp.t)}이에요`:`안녕! 오늘도 같이 기록해요`;
+  const Az=analyze();const idle=Az.away?(Az.awayKind==='outing'?`즐거운 외출! 🚗 쉬 마려우면 알려 줘`:`어린이집 잘 다녀와! 🎒 기다릴게`):lp?`마지막 쉬는 ${fmtAgo(Date.now()-lp.t)}이에요`:`안녕! 오늘도 같이 기록해요`;
   const showSay=S.tab==='today';
   const hr=now.getHours(),night=hr>=19||hr<6;
   return `<header class="sky${night?' night':''}"><span class="cl c1"></span><span class="cl c2"></span><span class="cl c3"></span>${night?'<span class="moon"></span><span class="stx" style="right:76px;top:12px">✦</span><span class="stx" style="right:150px;top:46px;font-size:10px">✦</span><span class="stx" style="left:46%;bottom:12px;font-size:11px">★</span><span class="stx" style="left:38%;top:10px;font-size:9px">✦</span><span class="stx" style="right:20px;bottom:18px;font-size:10px">★</span>':'<span class="sun"></span>'}<div class="top"><div class="who"><div class="app">쉬쉬기록</div>${nameEl}</div><div class="date">${now.getMonth()+1}월 ${now.getDate()}일<br>${DOW[now.getDay()]}요일</div></div>
@@ -917,14 +918,20 @@ function renderToday(){
   const stPoo=`<span class="st poo">💩 ${A.lastPoo?`마지막 응가 ${whenLabel(A.lastPoo.t)}`:'응가 기록 없음'}</span>`;
   const mini=(l,v)=>`<div class="mini"><div class="l">${l}</div><div class="v num">${v}</div></div>`;
   const ringCenter=`<div class="l">오늘</div><div class="v num">💧 ${peeCnt(todays)} · 💩 ${cnt(todays,'poo')}</div><div class="s">${oopsText(todays)||'하루 24시간'}</div>`;
-  return header()+`
-  <section class="hero" aria-label="현재 상태">
-    <div><div class="lbl">💧 마지막 쉬</div>
+  const atDaycare=A.away,isOut=A.awayKind==='outing';
+  const outPee=isOut&&A.lastPee&&A.lastPee.t>=A.awayStart;
+  const heroTop=atDaycare?`<div><div class="lbl">${isOut?'🚗 외출 중이에요':'🎒 어린이집에 있어요'}</div>
+      <div class="big num">${now-A.awayStart<60000?(isOut?'방금 나갔어요':'방금 등원'):fmtDur(now-A.awayStart)+'째'}</div>
+      <div class="since">${fmtTime(A.awayStart)} ${isOut?'외출':'등원'}${outPee?` · 외출 중 마지막 쉬 ${fmtAgo(now-A.lastPee.t)}`:A.lastPee?` · 나가기 전 마지막 쉬 ${fmtTime(A.lastPee.t)}`:''} · ${isOut?'밖에서도 쉬하면 쉬했어요를 눌러 주세요':'데려오면 🏠 돌아왔어요를 눌러 주세요'}</div></div>`
+    :`<div><div class="lbl">💧 마지막 쉬</div>
       <div class="big num">${A.lastPee?fmtAgo(now-A.lastPee.t):'기록 없음'}</div>
-      <div class="since">${A.lastPee?whenLabel(A.lastPee.t)+(A.lastPee.type==='accident'?'에 팬티에 쉬했어요':'에 쉬했어요'):'아래 쉬했어요 버튼을 눌러 시작해요'}</div></div>
+      <div class="since">${A.lastPee?whenLabel(A.lastPee.t)+(A.lastPee.type==='accident'?'에 팬티에 쉬했어요':'에 쉬했어요'):'아래 쉬했어요 버튼을 눌러 시작해요'}</div></div>`;
+  return header()+`
+  <section class="hero${atDaycare?' daycare':''}" aria-label="현재 상태">
+    ${heroTop}
     <div class="minis">${mini('평균 쉬텀',ints.length?fmtDur(avg(ints)):'–')}${mini('가장 짧은',ints.length?fmtDur(Math.min(...ints)):'–')}${mini('가장 긴',ints.length?fmtDur(Math.max(...ints)):'–')}</div>
     ${outcomeBar(outcomes(todays),true)}
-    <div class="states">${stAway}${stSleep}${stPoo}</div>
+    <div class="states">${atDaycare?'':stAway}${stSleep}${stPoo}</div>
   </section>
   <div class="tools"><span class="tt">오늘도 콕콕 기록해요</span><div class="right">${A.away?`<button class="awaybtn on" data-rec="back">🏠 돌아왔어요 <small>${A.awayKind==='outing'?'외출':'어린이집'} ${now-A.awayStart<60000?'방금':fmtDur(now-A.awayStart)+'째'}</small></button>`:S.awayPick?`<button class="awaybtn pick" data-out="daycare">🎒 어린이집</button><button class="awaybtn pick" data-out="outing">🚗 외출</button>`:`<button class="awaybtn" data-awaypick="1">🎒 나가요</button>`}
     <div class="wearmini" role="group" aria-label="지금 입은 것: ${wearing?'팬티':'기저귀'}">
