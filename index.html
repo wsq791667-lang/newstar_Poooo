@@ -592,7 +592,8 @@ function analyze(){
   for(const e of asc){if(e.type==='sleep'){if(sStart==null)sStart=e.t}else if(e.type==='wake'){if(sStart!=null){sleeps.push({start:sStart,end:e.t});sStart=null}}}
   if(sStart!=null)sleeps.push({start:sStart,end:null});
   SLEEPS=sleeps;
-  const aways=[],outings=[];let aStart=null,aKind=null;for(const e of asc){if(e.type==='out'){if(aStart==null){aStart=e.t;aKind=e.place==='outing'?'outing':'daycare'}}else if(e.type==='back'){if(aStart!=null){(aKind==='outing'?outings:aways).push({start:aStart,end:e.t});aStart=null}}}
+  const aways=[],outings=[];let aStart=null,aKind=null;const autoEnd=()=>{(aKind==='outing'?outings:aways).push({start:aStart,end:sod(aStart)+DAY,auto:true});aStart=null};for(const e of asc){if(aStart!=null&&dayKey(e.t)!==dayKey(aStart))autoEnd();if(e.type==='out'){if(aStart==null){aStart=e.t;aKind=e.place==='outing'?'outing':'daycare'}}else if(e.type==='back'){if(aStart!=null){(aKind==='outing'?outings:aways).push({start:aStart,end:e.t});aStart=null}}}
+  if(aStart!=null&&dayKey(aStart)!==dayKey(Date.now()))autoEnd(); /* 돌아왔어요를 못 눌러도 자정이 지나면 끝난 걸로 봐요 */
   if(aStart!=null)(aKind==='outing'?outings:aways).push({start:aStart,end:null});
   const quietOut=outings.filter(o=>!asc.some(x=>isPee(x)&&x.t>=o.start&&x.t<=(o.end??Date.now()))).map(o=>({...o,kind:'outing'}));
   AWAYS=[...aways.map(a=>({...a,kind:'daycare'})),...quietOut];let lastBack=null;
@@ -1064,7 +1065,7 @@ function toast(msg,undoId,ask){
 
 /* ---------- edit sheet ---------- */
 function openSheet(id){
-  const src=id?S.events.find(x=>x.id===id):{type:'pee',t:Date.now()};if(!src)return;
+  const src=id?S.events.find(x=>x.id===id):{type:'pee',t:S.tab==='records'&&S.view==='day'&&dayKey(S.cursor)!==dayKey(Date.now())?sod(S.cursor)+(Date.now()-sod(Date.now())):Date.now()};if(!src)return;
   const e={...src};let confirm=false;const d=new Date(e.t);
   const keep=()=>{const dv=$('#fDate')?.value,tv=$('#fTime')?.value;if(dv&&tv)d.setTime(new Date(`${dv}T${tv}`).getTime());if($('#fText'))e.text=$('#fText').value};
   const close=()=>{$('#sheetHost').innerHTML=''};
